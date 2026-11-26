@@ -6,11 +6,11 @@ Applicazione desktop Java per un catalogo multimediale locale. Il progetto è in
 
 È preparata una schermata di selezione dei profili: legge gli utenti dal database locale, permette di selezionare un profilo e di crearne uno con il pulsante «+». La selezione mostra il profilo scelto nella schermata corrente; non apre ancora altre schermate.
 
-La schermata e l'accesso al database sono stati scritti, ma non ancora compilati o provati nell'ambiente di sviluppo. La feature resta quindi in `Features da implementare` finché non sarà verificata.
+La prima compilazione ha rilevato un conflitto di nome tra un metodo della schermata e un metodo ereditato da Swing; il metodo è stato rinominato. La build deve essere rilanciata per verificare la correzione. La feature resta in `Features da implementare` finché compilazione e comportamento non saranno verificati.
 
 ## Cosa installare
 
-- **JDK, non solo JRE.** Il progetto compila codice compatibile con Java 8 (`pom.xml`). Serve quindi un JDK 8 o successivo; per esempio è possibile scaricare Eclipse Temurin dalla [pagina ufficiale delle release](https://adoptium.net/temurin/releases/). `javac` deve essere disponibile nel terminale.
+- **JDK 27, non solo JRE.** Il progetto usa Java 27 (`pom.xml`); serve quindi un JDK 27 per compilare ed eseguire. È possibile scaricare Eclipse Temurin dalla [pagina ufficiale delle release](https://adoptium.net/temurin/releases/). `javac` deve essere disponibile nel terminale. Java 27 è la versione stabile più recente disponibile al momento della scelta, ma non è una release LTS: riceve aggiornamenti fino a marzo 2027, quindi in seguito andrà rivalutato l'aggiornamento a una versione successiva.
 - **Apache Maven 3.9.0 o successivo.** Il comando di avvio usa Exec Maven Plugin 3.7.0, che richiede Maven 3.9.0 e JDK 8 o successivo. Installazione e archivio sono disponibili nella [guida ufficiale Maven](https://maven.apache.org/install.html).
 - **Connessione Internet al primo avvio della build.** Maven deve scaricare il driver SQLite e i plugin dichiarati nel progetto; dopo il download, questi componenti restano nella cache locale di Maven.
 
@@ -26,7 +26,7 @@ javac -version
 mvn -version
 ```
 
-`javac` deve rispondere con una versione Java; se il comando non viene trovato, è installato solo un runtime o il percorso del JDK non è nel `PATH`. L'output di `mvn -version` mostra anche quale Java Maven sta usando. Dopo aver installato o modificato il `PATH`, chiudi e riapri VS Code e i terminali.
+`javac` deve rispondere con la versione 27; se il comando non viene trovato, è installato solo un runtime o il percorso del JDK non è nel `PATH`. L'output di `mvn -version` mostra anche quale Java Maven sta usando: deve essere il JDK 27. Dopo aver installato o modificato il `PATH`, chiudi e riapri VS Code e i terminali.
 
 ## Compilare e avviare
 

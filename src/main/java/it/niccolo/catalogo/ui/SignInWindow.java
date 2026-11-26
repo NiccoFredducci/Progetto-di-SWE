@@ -162,7 +162,7 @@ public final class SignInWindow extends JFrame {
 
     private void updateSelectionStyle() {
         for (ProfileButton button : profileButtons) {
-            button.setSelected(selectedUser != null && selectedUser.getId() == button.user.getId());
+            button.setProfileSelected(selectedUser != null && selectedUser.getId() == button.user.getId());
         }
     }
 
@@ -252,7 +252,7 @@ public final class SignInWindow extends JFrame {
             add(content, BorderLayout.CENTER);
         }
 
-        private void setSelected(boolean selected) {
+        private void setProfileSelected(boolean selected) {
             this.selected = selected;
             repaint();
         }

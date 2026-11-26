@@ -43,6 +43,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # LaTeX generated files
+/docs/report.pdf
 *.aux
 *.bbl
 *.bcf
@@ -64,12 +65,10 @@ $RECYCLE.BIN/
 !.env.example
 *.local
 
-# Requisiti sorgente locali
-/requirements
-/requirements/*
-!/requirements/README.md
-!/requirements/.gitkeep
-REQUIREMENTS.md
+# Materiali e note locali di progetto, non pubblicati nel repository
+/requirements/
+/FEATURES.md
+/REQUIREMENTS.md
 
 # Istruzioni locali degli agenti
 /AGENTS.md
