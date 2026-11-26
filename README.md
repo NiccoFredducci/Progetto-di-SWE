@@ -1,12 +1,16 @@
-# Catalogo locale
+# Catalogo multimediale locale
 
-Applicazione desktop Java per un catalogo multimediale locale. Il progetto è in sviluppo; le funzionalità approvate e il loro stato sono elencati in [`FEATURES.md`](FEATURES.md).
+Applicazione desktop Java per esplorare e organizzare un catalogo multimediale locale. Il progetto è concepito con un nucleo riutilizzabile per cataloghi generici e una specializzazione concreta per i film: nel nucleo gli elementi sono media collegati a file, le categorie sono sezioni e le persone associate sono autori/contributori; nell'applicazione specifica i media sono film e le sezioni sono generi.
+
+Il lavoro privilegia modello di dominio, servizi, relazioni e persistenza. L'interfaccia serve a esplorare e verificare il sistema e non ne costituisce l'obiettivo principale.
+
+La roadmap incrementale con lo stato delle fasi è in [`IMPLEMENTATION.md`](IMPLEMENTATION.md).
 
 ## Stato attuale
 
-È preparata una schermata di selezione dei profili: legge gli utenti dal database locale, permette di selezionare un profilo e di crearne uno con il pulsante «+». La selezione mostra il profilo scelto nella schermata corrente; non apre ancora altre schermate.
+Il prototipo contiene una schermata iniziale di selezione profilo che legge i profili dal database locale e consente di selezionarne o crearne uno. Non apre ancora le schermate del catalogo.
 
-La prima compilazione ha rilevato un conflitto di nome tra un metodo della schermata e un metodo ereditato da Swing; il metodo è stato rinominato. La build deve essere rilanciata per verificare la correzione. La feature resta in `Features da implementare` finché compilazione e comportamento non saranno verificati.
+L'ultima compilazione effettuata ha rilevato un conflitto di nome con un metodo Swing; il metodo è stato rinominato, ma la build deve ancora essere rilanciata per verificare la correzione. La schermata e il salvataggio dei profili non sono quindi ancora dichiarati verificati.
 
 ## Cosa installare
 
@@ -79,7 +83,3 @@ perl -v
 ```
 
 Se VS Code segnala che `latexmk` o Perl non è disponibile, controlla che MiKTeX e Perl siano nel `PATH`, installa il pacchetto `latexmk` da MiKTeX Console e riavvia VS Code. MiKTeX può inoltre chiedere di scaricare pacchetti LaTeX mancanti durante la prima compilazione.
-
-## Manutenzione delle istruzioni
-
-Il README viene aggiornato insieme alle modifiche che cambiano installazione, avvio, configurazione o uso delle funzionalità. Le regole locali per gli agenti sono in `AGENTS.md` (file escluso dal repository).

@@ -1,9 +1,41 @@
 \chapter{Progettazione}
-\section{Architettura e package}
-% Inserire diagramma e responsabilità dei package sulla base del progetto verificato.
 
-\section{Modello di dominio}
-% Inserire diagrammi e motivazioni coerenti con i casi d'uso.
+\section{Direzione architetturale}
+La direzione di progetto distingue un framework di catalogo riutilizzabile da una sua istanza per il dominio dei film. Il docente ha consigliato di focalizzare il lavoro su modello di dominio e servizi, persistenza tramite ORM e controller verso l'interfaccia; l'autore ha adottato tale direzione. La GUI rimane uno strumento d'esplorazione e verifica.
+
+La separazione concreta dei moduli, i contratti d'estensione del framework e l'ORM da utilizzare devono ancora essere progettati e motivati. Il prototipo corrente accede a SQLite tramite JDBC; non va confuso con la direzione architetturale desiderata per il sistema completo.
+
+\section{Modello di dominio iniziale}
+I concetti generici individuati sono profilo utente, preferenza, sezione, media collegato a un file e autore o contributore. Il caso concreto li specializza come profilo con preferenze per media e autori, genere (sezione), film (media) riferito a un video locale e autore associato alle opere. Le relazioni del catalogo film sono istanze delle relazioni del framework, non una definizione alternativa dei concetti generici.
+
+La prima mappa distingue requisiti espressi e molteplicità da confermare:
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{|p{3.0cm}|p{4.0cm}|p{8.1cm}|}
+\hline
+\textbf{Relazione} & \textbf{Istanza per film} & \textbf{Stato e nota} \\
+\hline
+Profilo--media preferiti & Profilo--film preferiti & Relazione richiesta. L'interpretazione molti-a-molti è candidata; dipende anche da come si decide la condivisione del catalogo tra profili. \\
+\hline
+Profilo--autori preferiti & Profilo--autori di film preferiti & Relazione richiesta. La cardinalità molti-a-molti è da confermare insieme al modello di condivisione. \\
+\hline
+Sezione--media & Genere--film & Relazione molti-a-molti nel caso concreto: un film può avere più generi e un genere può contenere più film. Devono essere rappresentabili anche generi senza film. \\
+\hline
+Autore--media & Autore di film--film & Il form richiesto seleziona un autore per film; un autore può produrre più film. La cardinalità generica del framework (media--contributori) rimane aperta. \\
+\hline
+Autore--sezione & Autore di film--generi & Relazione derivata dai film associati all'autore e dai loro generi; il conteggio per genere è una proprietà calcolata, non un'associazione autonoma decisa. \\
+\hline
+\end{tabular}
+\end{center}
+
+Sono ancora da approvare la proprietà/condivisione del catalogo tra profili, la cardinalità generica media--contributore, l'eventuale salvataggio di un film senza genere e il comportamento delle cancellazioni. Questa mappa è una prima proposta per la revisione dell'autore, non è ancora lo schema relazionale né un diagramma UML definitivo.
 
 \section{Modello dei dati}
-% Inserire ER diagram e corrispondente modello relazionale dopo la definizione dello schema.
+L'applicazione conserva localmente le entità e le associazioni necessarie. Il prototipo utilizza attualmente SQLite; la strategia di persistenza e la mappatura ORM definitive saranno documentate dopo la loro scelta. Il modello relazionale dovrà rendere esplicite le chiavi, le cardinalità, i vincoli d'integrità e il comportamento delle cancellazioni.
+
+I riferimenti ai file video, alle locandine, alle foto profilo e alle foto degli autori sono dati da includere nell'analisi della persistenza. Non è ancora deciso se l'applicazione conserverà i percorsi originali o copierà i file, né come gestirà file successivamente spostati o rimossi.
+
+\section{Diagrammi}
+I diagrammi dei package, delle classi e del database saranno elaborati come artefatti progettuali a partire dai requisiti e dalle cardinalità approvate. Non sono ancora inclusi perché i confini del framework e alcune associazioni sono in fase di definizione.
