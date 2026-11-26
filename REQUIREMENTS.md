@@ -1,184 +1,140 @@
-# Requisiti e vincoli del progetto
+# Requisiti agnostici per il progetto SWE – Modalità 2
 
-## Stato e criteri dell'analisi
+## Scopo e criteri di lettura
 
-L'utente ha confermato che il progetto seguirà la **Modalità 2** del disciplinare `SWE25_disciplinareDiEsame_Vers1.2.pdf`. La scelta del dominio applicativo resta aperta. La traccia/esercitazione DDD della biblioteca si definisce esplicitamente uno sketch incompleto (PDF, p. 1) e non è stata scelta come progetto; i suoi contenuti restano una possibile fonte d'ispirazione, non funzionalità approvate. Le dispense, gli esempi e gli esercizi sono trattati come materiale didattico, non come requisiti del programma.
+Questo documento formalizza le indicazioni del corso per un progetto in Modalità 2 senza prescrivere uno specifico dominio applicativo o un insieme di funzionalità di prodotto. Deve guidare l'analisi, la progettazione, la realizzazione, la verifica e la relazione di un frammento applicativo scelto dallo studente.
 
-In questo documento:
+Le etichette distinguono la forza delle indicazioni:
 
-- **Esplicito** indica un'indicazione formulata direttamente in una fonte.
-- **Interpretazione** indica una lettura possibile, che non diventa un vincolo senza conferma.
-- **Da confermare/mancante** indica informazione non definita o decisione ancora aperta.
+- **Richiesta esplicita**: formulata come richiesta o prescrizione nel disciplinare corrente.
+- **Raccomandazione**: indicata come contenuto normale, consigliato o utile; va motivata e adattata al progetto.
+- **Pratica didattica**: principio o tecnica insegnata nelle dispense, non automaticamente un vincolo valutativo.
+- **Decisione da prendere**: informazione del progetto che le fonti non fissano e che deve essere decisa dall'autore o concordata col docente.
 
-## Descrizione e obiettivi
+Le citazioni puntano ai documenti in `requirements/`, che sono fonti locali fornite dall'utente e non vengono riprodotti qui. I domini presenti negli esempi del corso sono solo illustrazioni e non definiscono funzionalità o vincoli per il progetto.
 
-### Candidata traccia: biblioteca
+## 1. Inquadramento della Modalità 2
 
-Il documento `requirements/5. Object Oriented Analysis/BibliotecaDdd_4Nov2026-refined.pdf` presenta un'esercitazione di Domain Driven Design e model based development. La descrive come improvvisata, già trattata in precedenza e deliberatamente incompleta; il testo e i diagrammi sono stati poi ripuliti. Non specifica che questa sia la traccia scelta per il progetto dell'utente.
+### Obiettivo
 
-Il dominio abbozzato riguarda una biblioteca con volumi e collocazioni, copie di opere articolate in edizioni, commenti scritti da utenti, anagrafica utenti, catalogo, prestiti, solleciti e prenotazioni (PDF, p. 1). Il diagramma UML che accompagna la traccia mostra anche una possibile modellazione di questi elementi e delle interazioni, ma non ne completa le regole.
+- **Richiesta esplicita** — Realizzare la progettazione e lo sviluppo di un frammento applicativo riferito a un dominio applicativo dichiarato, applicando le pratiche di ingegneria del software affrontate nel corso. La Modalità 2 è quella comune/raccomandata nel disciplinare. La descrizione deve delimitare il frammento e renderne comprensibili obiettivo e confini; non è necessario realizzare un sistema completo del dominio. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 5–8, 20)
+- **Richiesta esplicita** — Il candidato deve comprendere e saper discutere il lavoro presentato, incluse le scelte e i contenuti del progetto. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 2–4)
+- **Decisione da prendere** — L'ampiezza deve bastare a mostrare analisi, progettazione, implementazione e verifica, ma non è fissato un numero minimo di funzioni, classi o casi d'uso. Il docente ha indicato di ampliare il perimetro solo se, dopo averlo definito, risulta troppo povero.
+- **Decisione da prendere** — Dominio, destinatari, confine del sistema, attori, obiettivi, funzioni incluse e non incluse, dati gestiti e contesto d'uso devono essere definiti per il singolo progetto. Non sono fissati dal disciplinare.
 
-## Requisiti funzionali della candidata traccia biblioteca
+### Fonti del progetto e controllo delle decisioni
 
-Questi punti descrivono la traccia e il relativo modello UML, non una decisione funzionale già presa dall'utente.
+- Le funzionalità applicative devono derivare da decisioni dell'autore, non essere copiate automaticamente da esempi, diagrammi didattici o nomi di pattern.
+- Distinguere nel materiale di progetto i fatti tratti dalle fonti, le decisioni approvate, le interpretazioni provvisorie e le questioni aperte. Contraddizioni tra fonti vanno segnalate e sottoposte al docente/autore, non risolte tacitamente.
+- Non sono prescritti un processo di sviluppo specifico, una piattaforma, un database, uno strumento di build, un framework o una versione Java. Sceglierli solo dopo averne verificato l'adeguatezza al progetto e ai vincoli del corso, e documentare le scelte.
 
-### Indicazioni esplicite nel testo
+## 2. Analisi dei requisiti e progettazione funzionale
 
-Il testo abbozza le seguenti capacità (PDF, p. 1):
+### Requisiti funzionali e casi d'uso
 
-1. Gestire volumi dotati di collocazione; i volumi sono copie di opere, organizzate in edizioni.
-2. Raccogliere commenti scritti da utenti su opere, edizioni e altri commenti.
-3. Gestire l'anagrafica degli utenti.
-4. Gestire un catalogo dei volumi e consentirne la consultazione.
-5. Gestire prestiti di volumi, solleciti e prenotazioni riferite a un'opera o a un'edizione.
-6. Prevedere registrazione, accesso e gestione/reimpostazione della password; il testo elenca “register, login, manage password”.
+- **Richiesta esplicita** — Esplicitare quali servizi, compiti o funzioni il prodotto fornisce e quali attori interagiscono col sistema. Descrivere l'obiettivo dell'attore e il confine del sistema. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 20, 22; `UseCaseDiagsAndTemplates_26.pdf`, in particolare pp. 2–8)
+- **Richiesta esplicita** — Includere diagrammi dei casi d'uso e template descrittivi dei casi d'uso. Diagramma e template devono corrispondere: identificativo e titolo coerenti; i template espandono le interazioni e i flussi rappresentati. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, p. 22; `UseCaseDiagsAndTemplates_26.pdf`, sezioni su use case diagram e template)
+- Per ogni caso d'uso significativo, specificare almeno: identificativo, titolo, livello/obiettivo, attori/ruoli, precondizioni, flusso normale, flussi alternativi o di errore e postcondizioni. Definire in modo comprensibile le condizioni che avviano o interrompono il flusso. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 22, 31–32; `UseCaseDiagsAndTemplates_26.pdf`, sezioni sui template e sui flussi)
+- Distinguere casi d'uso orientati a un obiettivo dell'attore da passi interni o dettagli di interfaccia; usare relazioni UML quali `include` ed `extend` solo quando chiariscono una relazione reale. Diagrammi alternativi possono mostrare prospettive/ruoli diversi quando ciò rende più leggibile il sistema. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 22, 40–41, 52–53; `UseCaseDiagsAndTemplates_26.pdf`)
+- Quando utile, associare ai passi del template i mockup disponibili e i test che li verificano, così che i flussi siano rintracciabili fino alla verifica. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 31–32, 40–41)
 
-### Varianti e casi emersi nel testo
+### Interfaccia e navigazione
 
-La stessa fonte segnala esplicitamente che durante l'analisi sono emersi casi “stated or implied” e possibili varianti (PDF, p. 1):
+- **Raccomandazione, non obbligo di GUI** — Mockup e diagramma di navigazione tra pagine sono raccomandati dal disciplinare; i mockup dovrebbero chiarire informazioni e controlli delle pagine, mentre la navigazione mostra come si passa tra esse. Possono essere sostituiti/aggiornati con schermate effettive quando l'interfaccia è realizzata. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 22, 42–43)
+- Le dispense e il disciplinare ammettono che le prove funzionali siano condotte tramite metodi di controller che fungano da surrogato dell'interfaccia: la GUI completa non è quindi un prerequisito generale per il progetto. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, p. 35; `NotesOnTheProjectWork_Jan2025.pdf`, sezione Testing)
+- **Decisione da prendere** — Se realizzare una GUI, una CLI o altra forma d'interazione; quali schermate/viste e navigazione prevedere; i requisiti di accessibilità e usabilità pertinenti. L'eventuale interfaccia deve essere proporzionata agli obiettivi del progetto. Il docente, nella risposta all'autore sul tema proposto, consiglia di non enfatizzare il front-end perché non è il tema del corso e può essere difficile da difendere: è un'indicazione di impostazione, non un divieto di interfaccia.
 
-- consultare opere disponibili e ricevere una notifica quando un'opera diventa disponibile;
-- modellare il prestito come un unico caso d'uso in cui l'utente lo compila e il bibliotecario conferma la consegna, oppure dividerlo in due casi d'uso;
-- notificare all'utente l'avvicinarsi della scadenza e inviare solleciti;
-- consentire una richiesta di estensione del prestito, collegata alle notifiche tramite relazione `<<extend>>` nel modello dei casi d'uso.
+## 3. Modello di dominio e progettazione
 
-La fonte non decide fra le alternative né definisce politiche, tempi o condizioni.
+### Analisi OO
 
-### Contenuti del modello UML associato
+- **Pratica didattica** — Individuare concetti, oggetti/entità, responsabilità, stati e relazioni rilevanti nel dominio; separare il modello concettuale del dominio dalle classi, componenti e dipendenze introdotte per implementarlo. Mantenere il modello fedele ai requisiti e sufficientemente semplice da poter essere spiegato. (`ObjectOrientedAnalysis20.pdf`, sezioni su analisi e modelli di dominio; `AnalysisIdioms20.pdf`)
+- Specificare le regole e i vincoli del dominio nei casi d'uso e/o nei modelli appropriati, senza lasciare che il solo diagramma sostituisca le regole testuali. Per processi lunghi, con alternative o responsabilità parallele, un diagramma di attività può integrare il template del caso d'uso. (`ActivityDiagsAndProcedureSpecification20.pdf`, sezioni su activity diagram e specifica procedurale)
+- Usare associazioni per relazioni strutturali e dipendenze per uso non strutturale, con molteplicità e navigabilità chiare quando pertinenti. Stereotipi e idiomi analitici sono strumenti esplicativi, non obblighi da applicare indiscriminatamente. (`UmlClassDiagramsImplementationPerspective26.pdf`; `AnalysisIdioms20.pdf`)
 
-Il file `requirements/5. Object Oriented Analysis/BibliotecaDdd_4Novembre26.mdj` contiene un modello StarUML con attori Utente, UtenteGenerico, Bibliotecario, Archivista e Sistema e i casi d'uso seguenti (nomi riportati dal diagramma; non sono specifiche testuali complete):
+### Architettura e package
 
-- pubblicare commento;
-- compilare e registrare prestito, prenotazione e restituzione;
-- ricevere notifiche di prossima scadenza, sollecito ed estensione;
-- richiedere e approvare un'estensione;
-- consultare il catalogo;
-- registrarsi, accedere e recuperare la password;
-- inviare notifiche, inclusa quella di disponibilità su prenotazione;
-- trovare e gestire (CRUD) collocazioni;
-- analizzare solleciti ed effettuare acquisizioni.
+- **Richiesta esplicita** — Presentare una vista d'insieme dell'architettura, un diagramma dei package e delle loro dipendenze, e spiegare responsabilità, contenuti e coesione di ciascun package. Indicare le tecnologie e gli strumenti effettivamente usati. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, p. 21)
+- L'architettura va motivata rispetto alle responsabilità e ai requisiti. La raccomandazione del docente per il tema proposto suggerisce di ragionare su modello di dominio, servizi, persistenza/ORM e controller verso l'interfaccia; sono responsabilità architetturali da valutare, non un obbligo a usare un ORM, un framework o una GUI in ogni progetto.
+- Il docente ha anche suggerito, come possibile approfondimento, di separare un nucleo riutilizzabile che gestisca elementi di un catalogo astratto da una specializzazione applicativa concreta. È un'opzione di progettazione da adottare solo se utile e giustificata; non è una struttura obbligatoria né un requisito funzionale.
+- **Richiesta esplicita** — Documentare la progettazione con diagrammi delle classi per package e una descrizione delle responsabilità e degli elementi di particolare significato. I diagrammi devono aiutare a comprendere il progetto e non essere un mero elenco di firme. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 24, 44, 48–49)
+- Quando serve a spiegare un comportamento rilevante, integrare i diagrammi delle classi con diagrammi di sequenza/collaborazione, attività o altri modelli appropriati; non è richiesto produrre ogni tipo di diagramma. (`UmlClassDiagramsImplementationPerspective26.pdf`; `ActivityDiagsAndProcedureSpecification20.pdf`)
 
-Il diagramma dei casi d'uso è un artefatto di esercitazione: non specifica in modo sufficiente precondizioni, flussi normali e alternativi, regole di business o criteri di accettazione. I nomi non vanno intesi automaticamente come funzionalità approvate.
+### Progettazione dei dati
 
-## Requisiti non funzionali
+- **Richiesta esplicita** — Documentare il modello di database. Il disciplinare mostra come riferimenti un diagramma Entità-Relazioni e il corrispondente modello relazionale. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 23, 39; `NotesOnTheProjectWork_Jan2025.pdf`, sezione Design)
+- **Interpretazione operativa** — Per rendere la documentazione verificabile, includere concetti/entità e relazioni, cardinalità, attributi, chiavi primarie ed esterne, vincoli d'integrità e la mappatura nel modello relazionale. Specificare quali dati sono persistenti e quali operazioni li leggono o modificano. La forma esatta dipende dai requisiti del dominio.
+- **Decisione da prendere** — Database, modalità di distribuzione e accesso, ORM o altra tecnologia di persistenza, migrazione/creazione dello schema e strategia di caricamento dei dati. Gli esempi del corso (tra cui JDBC/RDBMS) non fissano tali scelte per ogni progetto.
+- Modellare relazioni many-to-many, entità associative, attributi e vincoli secondo il significato del dominio; non rappresentare collezioni o associazioni come campi non strutturati senza giustificazione. Verificare la coerenza fra modello concettuale, schema relazionale e accesso ai dati.
 
-Non risultano requisiti non funzionali specifici della candidata applicazione biblioteca (per esempio sicurezza, prestazioni, accessibilità, disponibilità o usabilità). Il materiale didattico definisce in generale la distinzione tra requisiti funzionali e requisiti di qualità, ma non assegna valori o soglie al progetto (`requirements/6. Sw Development Lifecycle/SoftwareQuality_RobertoVerdecchia_Nov24/SE_lecture_software_quality.pdf`, pp. 6-7).
+### Diagrammi UML
 
-### Vincoli presenti in un esempio distinto di rete bibliotecaria
+- Usare UML come notazione di comunicazione/progettazione e mantenere distinti i diagrammi concettuali da quelli che descrivono la prospettiva d'implementazione. Associazioni strutturali, dipendenze e chiamate temporanee non sono intercambiabili. (`UmlClassDiagramsImplementationPerspective26.pdf`, sezioni su prospettive e relazioni)
+- **Vincolo del corso** — Non generare i diagrammi UML dal codice come sostituto della progettazione; il disciplinare considera normalmente inutile UML prodotto automaticamente dal codice. I diagrammi devono esprimere le decisioni progettuali discusse dall'autore. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 3–4)
 
-`requirements/5. Object Oriented Analysis/An example of problem statement - Rete Biblioteche.pdf` è un esempio didattico di una rete cittadina di biblioteche e non è identificato come la traccia DDD del progetto. Nel suo statement (p. 1) compaiono vincoli e obiettivi diversi: partenza con 8 sedi e circa 16.000 accessi al giorno, scalabilità a 32 nodi/64.000 accessi giornalieri, risposta sotto 10 secondi per consultazioni web e sotto 2 secondi dalle sedi, accessibilità AA, autenticazione sicura per ruoli e log non revocabile. Lo stesso esempio ipotizza un sistema web-based centralizzato.
+## 4. Implementazione e qualità del codice
 
-Questi sono requisiti espliciti **di quell'esempio**, non requisiti della candidata biblioteca DDD. Non sono trasferiti al progetto. Il PDF contiene 12 pagine, ma l'estrazione testuale ripete lo stesso statement; non emerge una specifica distinta nelle pagine successive dall'estrazione disponibile.
+- **Linguaggio** — Il progetto riguarda software sviluppato nel contesto del corso di Software Engineering; il repository è predisposto come progetto Java. Le fonti qui esaminate non fissano una versione Java: va concordata/decisa e documentata prima di basare il lavoro su specifiche API.
+- **Richiesta esplicita per la relazione** — Discutere dettagli d'implementazione significativi, responsabilità, estratti di codice selezionati e motivati, idiomi, pattern di progettazione/architetturali e dettagli sulle tecnologie effettivamente usate. Non serve trascrivere il codice sorgente nella relazione. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 18, 24, 33, 36–38)
+- **Pratiche di manutenibilità** — Favorire responsabilità comprensibili, interfacce e visibilità non più ampie del necessario, incapsulamento, stato invariabile quando appropriato, gestione consapevole di oggetti mutabili e collezioni esposte. Preferire composizione a ereditarietà quando riduce accoppiamento e fragilità; prestare attenzione alle classi base fragili, alla duplicazione e alla complessità. Sono pratiche discusse nelle dispense, da applicare con giudizio e da motivare, non una checklist universale. (`JavaBasicsAndIdioms24.pdf`, sezioni su accessibilità, immutabilità e copie difensive; immagini `requirements/1. Java Basics and Idioms/sketches/Sketches_SWE-22-09-28_ FragileBaseClass_DynamicMethodLookup.png` e `Sketches_SWE-22-10-05_ HelperMethodToFixFragileBaseClass.png`)
+- Documentare le scelte di pattern con il problema affrontato, il ruolo delle parti coinvolte e le conseguenze/alternative pertinenti. Un pattern è una soluzione ricorrente applicabile a un contesto; il solo uso nominale di un pattern non è un requisito e forzarlo senza motivazione può aumentare complessità. (`DesignPatternsJava22.pdf`, sezioni introduttive e discussione di pattern; `DesignPatternsJava20.pdf`)
+- Non è prescritta una metrica di qualità o una soglia quantitativa universale. Le misure, se usate, devono rispondere a una domanda esplicita e ai requisiti del progetto, essere interpretabili e non diventare obiettivi isolati. (`SE_lecture_software_quality.pdf`, pp. 44–70)
 
-## Indicazioni e vincoli del corso
+## 5. Requisiti non funzionali e qualità
 
-La fonte più recente e specifica è `requirements/SWE25_disciplinareDiEsame_Vers1.2.pdf`, intitolata Software Engineering A.A. 2025/26, versione 1.2 (dicembre 2025). La fonte precedente `requirements/NotesOnTheProjectWork_Jan2025.pdf` è versione 1.1, dichiarata incompleta, per A.A. 2024/25. Se i due documenti differiscono, in questa sintesi si evidenzia il testo più recente come riferimento corrente, senza cancellare le differenze.
+- **Decisione da prendere per ogni progetto** — Individuare gli attributi di qualità rilevanti dal contesto e dagli attori, formulandoli in modo osservabile o verificabile quando possibile. Il corso distingue ciò che il prodotto deve fare (requisiti funzionali) da come/quanto bene deve farlo (requisiti di qualità/non funzionali). (`SE_lecture_software_quality.pdf`, pp. 6–7)
+- Gli attributi da considerare includono, a titolo di analisi e non come requisiti universali: adeguatezza e completezza funzionale; efficienza/prestazioni e capacità; compatibilità/interoperabilità; usabilità e accessibilità; affidabilità, disponibilità e tolleranza ai guasti; sicurezza; manutenibilità (modularità, riusabilità, analizzabilità, modificabilità, testabilità); flessibilità/adattabilità; sicurezza operativa. Definizioni e dimensioni sono trattate nel modello ISO/IEC 25010 illustrato nelle dispense. (`SE_lecture_software_quality.pdf`, pp. 10–43)
+- Non trasferire dal materiale esemplificativo soglie, numeri, livelli di servizio o requisiti di sicurezza: per il singolo progetto vanno definiti in base a utenti, rischi, ambiente operativo e obiettivi. Se un attributo non è rilevante, non inventare un requisito artificiale.
+- Valutare e discutere debito tecnico, manutenibilità e complessità quando pertinenti. Metriche statiche/dinamiche, copertura e complessità ciclomatica sono segnali parziali, non prove autonome della qualità o correttezza. (`SE_lecture_software_quality.pdf`, pp. 44–79; `Lifecycles20.pdf`, pp. 16–23)
 
-### Modalità di progetto
+## 6. Verifica e testing
 
-Il disciplinare presenta tre modalità (disciplinare v1.2, pp. 5-8):
+- **Richiesta esplicita** — Distinguere test funzionali (black-box / integrazione) da test strutturali (white-box / unitari), motivando i test significativi e collegandoli alle funzioni e ai flussi documentati. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 18, 25, 35–38)
+- **Test funzionali** — Derivare i casi di prova dai requisiti e dai template dei casi d'uso; verificare esiti attesi dei flussi normali, alternativi e di errore attraverso il confine applicativo appropriato. Il disciplinare indica che metodi del controller possono fungere da surrogato della GUI. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 25, 35–36)
+- **Test strutturali/unitari** — Usare la conoscenza della struttura interna per verificare unità significative della logica, incluse condizioni/rami rilevanti e casi limite. Selezionare elementi critici o di particolare interesse e spiegare cosa copre il test e cosa resta fuori. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 25, 37; `Software Testing Principles and Java Testing Tools.pdf`, pp. 16–19, 26–32)
+- **Persistenza** — Verificare operazioni e interrogazioni di accesso ai dati, se non già coperte dai test funzionali. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, p. 38)
+- Mantenere una traccia tra requisito/caso d'uso, identificativo di test, setup, input, azione e risultato atteso/osservato. Includere dati di prova e condizioni necessarie per riprodurre i risultati. Questa è l'interpretazione operativa necessaria a documentare prove verificabili; il template e il livello di dettaglio vanno adeguati al progetto.
+- Le dispense descrivono granularità (unit, end-to-end, integration), piramide dei test, selezione/astrazione dei test e coverage; ciò informa la strategia, ma non prescrive una percentuale di copertura o uno specifico framework. JUnit è presentato come strumento Java didattico, non come unica scelta obbligatoria. (`Software Testing Principles and Java Testing Tools.pdf`, pp. 8–14, 16–32)
+- **Decisione da prendere** — Strumenti, automazione, ambienti, dati e livelli di test da usare. Riportare con onestà quali verifiche sono state effettivamente eseguite; non dichiarare test passati se non eseguiti.
 
-- **Modalità 1:** esercizio più circoscritto di progettazione OO, sviluppo e test, di norma centrato sulla combinazione di 2-3 design pattern in uno scenario; semplifica l'obiettivo.
-- **Modalità 2:** progettazione e produzione di un frammento applicativo riferito a un dominio, per applicare le pratiche del corso; il documento la indica come modalità comune.
-- **Modalità 3:** progetto più ambizioso, definito caso per caso per candidati con solide capacità di sviluppo.
+## 7. Processo di sviluppo, evoluzione e manutenzione
 
-L'utente ha scelto la **Modalità 2** per questo progetto. Le prescrizioni e le raccomandazioni della sezione seguente sono quindi il riferimento del corso applicabile, fermo restando che la specifica applicativa e il dominio devono ancora essere definiti.
+- Le dispense descrivono cicli di vita e processi sequenziali, iterativi/incrementali e adattivi, con artefatti e attività di analisi, progettazione, implementazione, test e rilascio. Non viene imposto un unico modello di ciclo di vita al singolo progetto; il processo scelto deve sostenere feedback, verifica e controllo dei cambiamenti. (`Lifecycles20.pdf`, pp. 3–14, 23–47)
+- **Pratica raccomandata** — Sviluppare per passi coerenti e mantenere sincronizzati requisiti, modelli, codice e test; quando una decisione cambia, aggiornare gli artefatti coinvolti e verificare le ricadute. Le dispense trattano feedback, integrazione continua, piccoli rilasci e riduzione delle separazioni tra attività come pratiche di processo/adattamento, non come toolchain obbligatoria. (`Lifecycles20.pdf`, pp. 35–47)
+- **Richiesta dell'autore per questo progetto** — Aggiornare progressivamente la relazione sorgente LaTeX già presente in `docs/` mentre si sviluppa il progetto, anziché compilarla soltanto alla fine. Dopo ogni cambiamento sostanziale aggiornare le sezioni effettivamente interessate (requisiti, modelli, architettura, implementazione o verifiche), mantenendo coerenza con il software e tracciabilità ai casi d'uso e ai test. Registrare solo scelte, artefatti e risultati osservati; lasciare segnaposto dove manca una decisione o una verifica. La compilazione del PDF e la procedura di consegna vanno definite in base agli strumenti effettivamente disponibili.
+- **Vincolo esplicito del corso sull'uso dell'AI** — L'uso di AI generativa è ammesso e va documentato, compresi strumenti, modalità d'uso e parti del lavoro interessate; non generare UML dal codice. Il disciplinare avverte che testo generico prodotto dall'AI non è accettabile come relazione d'esame. L'autore deve quindi rielaborare e assumersi la responsabilità del testo finale; l'assistenza alla manutenzione LaTeX può tenere aggiornati struttura, fatti verificabili, riferimenti e appunti, che l'autore dovrà trasformare nella propria relazione. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 3–4)
 
-### Contenuti del report per modalità 2
+## 8. Relazione e consegna d'esame
 
-Per la modalità 2 il disciplinare dice che la relazione **normalmente** include (v1.2, pp. 18-25):
+### Struttura di riferimento
 
-- frontespizio con corso, anno accademico, autori e docente e un indice esplicativo (p. 19);
-- statement sintetico del contesto applicativo e del suo obiettivo (p. 20);
-- architettura d'insieme, diagramma dei package/dipendenze e descrizione delle responsabilità e dei componenti per package, oltre a tecnologie e strumenti usati (p. 21);
-- analisi dei requisiti e disegno funzionale;
-- Use Case Diagram e template dei casi d'uso;
-- progettazione con diagrammi delle classi per package, spiegazione delle responsabilità e dettagli significativi;
-- documentazione del modello di database;
-- dettagli implementativi, snippet motivati e discussione degli idiomi/pattern/tecnologie significativi;
-- test funzionali e strutturali.
+- Il disciplinare dice che la relazione di Modalità 2 **normalmente** include: statement; architettura a colpo d'occhio; tecnologie e strumenti; analisi dei requisiti e disegno funzionale (diagrammi e template dei casi d'uso, mockup e navigazione); progettazione (architettura, package, diagrammi delle classi per package e dettagli significativi); dettagli d'implementazione, responsabilità, snippet motivati, idiomi/pattern/tecnologie; test funzionali black-box/integrazione e strutturali white-box/unitari. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, p. 18)
+- Il frontespizio deve identificare corso, anno accademico, autore/i e docente; fornire un indice esplicativo che aiuti a capire l'organizzazione del documento. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, p. 19)
+- Lo statement dev'essere chiaro e sintetico e descrivere contesto e obiettivo dell'applicazione. Le sezioni di architettura, package, progetto e database devono descrivere ciò che è stato effettivamente progettato. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 20–24)
+- Motivare gli estratti di codice scelti e discutere gli elementi di particolare rilievo, invece di riportare grandi quantità di codice senza spiegazione. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 24, 33, 36–38)
 
-Il disciplinare distingue il grado di obbligatorietà in modo esplicito solo per alcuni artefatti: **Use Case Diagram e template sono obbligatori**; **mockup e diagramma di navigazione sono raccomandati** (p. 22). I template devono caratterizzare ciascun caso d'uso con numero, titolo, descrizione, livello, attori, pre/post-condizioni e flussi normale e alternativi; i flussi alternativi vanno numerati in relazione ai passi da cui si diramano e i casi d'uso devono restare coerenti tra diagrammi e template (p. 31). È suggerito l'uso di `<<include>>` e `<<extend>>` e un uso limitato di `<<precedes>>`/`<<invokes>>` (p. 22).
+### Consegna e discussione
 
-La progettazione include il modello del database (p. 23); le slide chiedono di documentarlo con diagramma Entity-Relationship e modello relazionale (p. 39). La parte di testing distingue: test funzionali black box/integrazione sui metodi dei Controller della business logic, collegati ai flussi dei template (p. 35); unit test white box su elementi critici o rilevanti (p. 37); test di DAO e, se non già coperti, delle query (p. 38). I test sono da motivare e ricondurre ai casi d'uso/template (p. 36).
+- **Vincoli espliciti nel disciplinare v1.2** — Inviare il PDF della relazione via email almeno tre giorni lavorativi prima dell'appello; il repository/GitHub è suggerito come riferimento; portare il laptop/ambiente necessario alla discussione. Saper comprendere e difendere il lavoro. Verificare eventuali aggiornamenti organizzativi del corso prima dell'appello. (`SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 2–4)
+- Il documento precedente (`NotesOnTheProjectWork_Jan2025.pdf`, versione 1.1, A.A. 2024/25) si dichiara incompleto. È utile per chiarire template, database, mockup e diagrammi, ma dove differisce prevale come riferimento corrente il disciplinare v1.2, A.A. 2025/26.
 
-L'architettura/package diagram e la documentazione di progetto sono chiaramente attesi nella relazione. Le slide dicono che la relazione “normalmente” comprende le sezioni elencate: al di fuori degli artefatti marcati obbligatori, non presentano una checklist formale con la stessa etichetta di obbligatorietà per ogni singola sottosezione.
+## 9. Decisioni e lacune ancora aperte
 
-### Interfaccia utente: cosa è richiesto
+Le seguenti informazioni non sono fissate dalle fonti del corso e devono essere decise per il singolo progetto senza attribuirle al disciplinare:
 
-Il disciplinare **non impone di realizzare una GUI o un'interfaccia grafica**. Questa è un'interpretazione diretta delle indicazioni: mockup e page-navigation diagram sono espressamente raccomandati, non obbligatori (p. 22); i test possono fare da surrogato dell'interfaccia e della persistenza (p. 25); i test funzionali possono chiamare i metodi dei Controller, che “surrogano” l'interfaccia utente (p. 35). La slide sui mockup dice che, se si sviluppa un'interfaccia, i mockup sono sostituiti da screenshot (p. 42). Non c'è neppure un divieto di implementarla.
+1. Dominio applicativo definitivo, statement, utenti/attori e confine del frammento.
+2. Elenco e priorità delle funzionalità approvate, regole di business, dati, pre/postcondizioni e flussi alternativi.
+3. Requisiti non funzionali pertinenti e relativi criteri di accettazione misurabili, ove necessari.
+4. Presenza e forma dell'interfaccia, strumenti per i mockup e livello di navigazione.
+5. Modello dati, database, ORM/driver, strategia di persistenza e schema concreto.
+6. Versione Java, ambiente di esecuzione, strumenti di build, librerie/framework e compatibilità richiesta.
+7. Piano/strumenti di test, dati di test, criteri di copertura e verifiche da eseguire.
+8. Convenzioni del docente non riportate nel disciplinare corrente e dettagli aggiornati di consegna dell'appello.
 
-Quindi una UI reale è **opzionale secondo questo disciplinare**. Un programma Java con business logic accessibile tramite Controller e test funzionali può essere coerente con le indicazioni; una CLI è un'altra possibilità. Se si sceglie di costruire schermate, si documentano con screenshot e, se utile, mockup e navigazione. La possibile richiesta di un docente o di un incarico specifico non incluso nei file resta da verificare separatamente.
+Questi punti non sono requisiti funzionali impliciti e non autorizzano ad aggiungere funzioni. Le decisioni devono essere concordate con l'autore e, quando necessario, verificate col docente.
 
-### Esempio illustrato nelle slide: serra
+## Fonti esaminate e limiti
 
-Le slide includono un esempio di statement per la gestione di una serra (p. 28): spazi suddivisi in settori e posizioni per le piante; aerazione, illuminazione, temperatura, luce e umidità monitorate; irrigazione e gestione in parte automatizzate; amministratore con monitoraggio in tempo reale; operatori per cura e posizionamento manuali; clienti che ordinano piante con consegna prevista. È un esempio didattico, non una traccia imposta.
+Fonte normativa principale: `requirements/SWE25_disciplinareDiEsame_Vers1.2.pdf` (A.A. 2025/26, v1.2, 3 dicembre 2025). Riferimento precedente: `requirements/NotesOnTheProjectWork_Jan2025.pdf` (A.A. 2024/25, v1.1, dichiarato incompleto). Dispense tematiche consultate: `JavaBasicsAndIdioms22.pdf`, `JavaBasicsAndIdioms24.pdf`, `DefensiveCopies.pdf`, `guida-eclipse-javaSE.pdf`, `UmlClassDiagramsImplementationPerspective26.pdf`, `DesignPatternsJava20.pdf`, `DesignPatternsJava22.pdf`, `Design Patterns_ The Builder Pattern - DZone Java.pdf`, entrambe le dispense `iteratorPattern_javaCollectionFramework`, `telescopicConstructor.pdf`, `Software Testing Principles and Java Testing Tools.pdf`, `ObjectOrientedAnalysis20.pdf`, `AnalysisIdioms20.pdf`, `ActivityDiagsAndProcedureSpecification20.pdf`, `UseCaseDiagsAndTemplates_26.pdf`, `UseCaseDiagsAndTemplates_SW4ES_19.pdf`, `Lifecycles20.pdf` e `SE_lecture_software_quality.pdf`. I diagrammi e le figure presenti nei PDF sono stati inclusi nella lettura visiva; le figure chiariscono concetti ed esempi, ma non aggiungono requisiti applicativi al progetto.
 
-La slide seguente mostra un'architettura con **CLI**, Business Logic, Domain Model, ORM, JDBC e RDBMS/PostgreSQL, e descrive i package e le loro responsabilità (p. 29). Le slide successive mostrano snippet di test sul modello (per esempio sensore e irrigatore, p. 37) e un modello ER della serra (p. 39). Questo esempio conferma visivamente che un progetto di Modalità 2 può essere presentato senza GUI grafica; non rende però CLI, PostgreSQL o JDBC obbligatori per il tuo progetto.
-
-### Indicazioni per modalità 1
-
-Per la modalità 1, il disciplinare illustra un elaborato basato su statement, diagramma delle classi UML, implementazione e test; altri artefatti UML dipendono dal tema (v1.2, pp. 9-16). JUnit è citato come strumento nei materiali/esempi per implementare test (p. 9 e p. 14), ma non è specificata una versione o una configurazione del progetto.
-
-### Presentazione, AI e colloquio
-
-Il disciplinare v1.2 stabilisce o raccomanda quanto segue:
-
-- inviare la relazione in PDF via email almeno tre giorni lavorativi prima della discussione; il link a GitHub è suggerito, non obbligatorio;
-- portare un portatile con l'ambiente di sviluppo alla discussione;
-- includere `[SWE]` nell'oggetto delle email e mantenere il thread;
-- il lavoro è autoassegnato e serve da argomento per la discussione; il candidato deve comprendere e saper discutere tutto ciò che presenta;
-- l'AI generativa è benvenuta ma non obbligatoria; documentarne le parti e il processo d'integrazione è richiesto dal testo; il candidato deve saper discutere le scelte generate;
-- non generare UML a partire dal codice;
-- la versione 1.2 dice che non è accettabile testo generato nella relazione quando questa deve essere letta da persone (pp. 2-4).
-
-Queste ultime indicazioni sono del disciplinare e riguardano il lavoro d'esame/la relazione; non sono requisiti funzionali della biblioteca.
-
-## Linguaggi, tecnologie e strumenti
-
-- **Linguaggio didattico esplicito:** Java è il linguaggio usato nei materiali del corso (per esempio `JavaBasicsAndIdioms24.pdf`, pp. 1-3). L'incarico dell'utente presenta inoltre il repository come progetto Java.
-- **Modellazione:** UML è usato nelle indicazioni del corso; StarUML compare nei file `.mdj` e nei materiali.
-- **Test:** il corso distingue test funzionali e strutturali; JUnit compare come strumento negli esempi.
-- **Possibili architetture/tecnologie:** JDBC, JavaFX e JavaEE/Jakarta sono menzionati come esempi o possibilità; la traccia biblioteca dice che un'architettura layered in stile JavaEE/Jakarta è da continuare (PDF biblioteca, p. 3), non la impone.
-- Una guida locale descrive l'avvio di Eclipse e la creazione di un progetto Java SE (`requirements/1. Java Basics and Idioms/guida-eclipse-javaSE.pdf`, pp. 1-2), ma non stabilisce che Eclipse sia obbligatorio.
-- **Non specificati:** versione Java, sistema di build, framework, librerie, database, interfaccia, piattaforma di destinazione e ambiente di esecuzione.
-
-## Consegna e valutazione
-
-Le indicazioni disponibili per l'esame sono riportate sopra. Il disciplinare non fornisce una rubrica quantitativa o criteri/pesi di valutazione dettagliati nei passaggi esaminati. Richiede però padronanza dei contenuti presentati e descrive report e artefatti attesi secondo la modalità scelta. Non sono presenti una scadenza specifica di progetto, un formato di consegna del codice o un repository remoto obbligatorio.
-
-## Contraddizioni, ambiguità e decisioni mancanti
-
-1. **Scelta del dominio:** la modalità 2 è confermata; resta da scegliere il dominio. I file includono la traccia DDD della biblioteca, un esempio separato di rete bibliotecaria con vincoli molto diversi, un esempio serra e altre esercitazioni (per esempio gestione appelli).
-2. **UI e persistenza concrete:** il disciplinare non impone una GUI e consente ai test di surrogarla; le slide mostrano una CLI. La persistenza effettivamente implementata e il database da usare non sono fissati come scelte tecnologiche per il progetto, anche se il modello del database è previsto nella documentazione della progettazione.
-3. **Varianti della biblioteca:** il disciplinare dell'esercitazione lascia aperto se prestito/registrazione siano uno o due casi d'uso; le regole per prestiti, prenotazioni, notifiche, estensioni e commenti sono incomplete.
-4. **Modello non equivalente a specifica:** il diagramma StarUML contiene casi d'uso ulteriori rispetto allo statement (per esempio acquisizioni e gestione delle collocazioni). La loro presenza nel diagramma non prova che siano requisiti approvati.
-5. **Versioni dei materiali:** il disciplinare v1.1 di gennaio 2025 e v1.2 di dicembre 2025 si riferiscono ad anni accademici diversi e hanno formulazioni diverse. Il v1.2 è più recente; eventuali istruzioni specifiche del docente non sono incluse.
-6. **Tecnologie e architettura:** Java è il contesto del corso, ma non sono fissati versione, build, database o framework. Le menzioni di Eclipse, JDBC, JavaFX e JavaEE/Jakarta sono indicazioni/esempi, non scelte confermate per il repository.
-7. **Qualità e valutazione:** non sono stati trovati obiettivi misurabili di qualità né una griglia dettagliata di valutazione.
-
-## Inventario dei materiali esaminati
-
-Sono stati inventariati ricorsivamente i contenuti di `requirements/` dopo l'estrazione: 24 PDF, 22 PNG, 12 modelli StarUML `.mdj`, 66 sorgenti Java e 30 file `.class` di esempio, 6 DOCX, 2 HTML, 2 PPTX, i file di progetto/configurazione Eclipse, gli archivi originali ZIP/RAR, `README.md` e `.gitkeep`. Le cartelle estratte contengono esempi di codice e test, non specifiche di prodotto.
-
-- I PDF sono stati esaminati per testo, pagine e contenuti pertinenti; è stato incluso anche `DefensiveCopies.pdf` estratto dal RAR, che specifica un esercizio didattico su copie difensive e relativi test, non il prodotto biblioteca. Le pagine grafiche sono state consultate con rendering visivo per i materiali centrali: nel disciplinare v1.2 sono state viste in particolare le pagine 5-8 e 18-56, inclusi esempi, mockup/screenshot, architetture, test, ER e diagrammi di navigazione. La traccia biblioteca è stata confrontata con il modello `.mdj` associato.
-- Le 22 immagini PNG sono state passate in rassegna visivamente: sono schizzi didattici, prevalentemente del 2020, su Java/UML/pattern; non sono emerse schermate o specifiche grafiche attribuibili con certezza alla biblioteca. La scrittura a mano e la scala delle scansioni limitano la lettura puntuale di alcuni dettagli.
-- I modelli `.mdj` sono stati letti come modelli, per identificarne attori, casi d'uso, classi e package; i file che rappresentano esempi diversi non sono stati trattati come requisiti della biblioteca.
-- DOCX, PPTX, HTML, README e documentazione testuale estratti da ZIP/RAR sono stati letti per individuare requisiti o vincoli. I sorgenti Java e i test estratti sono stati inventariati e campionati, senza eseguirli. I materiali riguardano esempi di copie difensive, classi base fragili, Observer, Iterator, collezioni, Composite/Adapter/Strategy e Visitor; non aggiungono specifiche per la biblioteca.
-- Gli archivi originali restano presenti accanto alle cartelle estratte. Nell'esempio `EvOct14_FragileBaseClass` sono ancora visibili due copie RAR annidate nelle cartelle `src` e `bin`; l'utente conferma che una è stata estratta e che quella in `src` era già rappresentata dai file estratti presenti. Le cartelle contengono i sorgenti e gli artefatti compilati corrispondenti; non resta una lacuna documentale rilevante per i requisiti del progetto.
-
-Tra i materiali didattici/esempi figurano Java Basics e idioms (`1. Java Basics and Idioms/JavaBasicsAndIdioms22.pdf`, `JavaBasicsAndIdioms24.pdf`), UML di implementazione (`2. UML Diagrams - Implementation Perspective/UmlClassDiagramsImplementationPerspective26.pdf`), Design Patterns (`3. Design Patterns/DesignPatternsJava20.pdf`, `DesignPatternsJava22.pdf`, articolo Builder, esempi Iterator e costruttori), testing (`4. ElementsOfTesting/Software Testing Principles and Java Testing Tools.pdf`), analisi OO e use case (cartella `5. Object Oriented Analysis/`), lifecycle/qualità (cartella `6. Sw Development Lifecycle/`) ed esercizi pattern-based (cartella `7. Exercises/`). Questi materiali forniscono contesto metodologico; gli esempi applicativi in essi contenuti non sono stati trasferiti come requisiti del prodotto.
-
-## Tracciabilità delle informazioni principali
-
-| Informazione | Classificazione | Fonte e riferimento |
-| --- | --- | --- |
-| Volumi, opere, edizioni, collocazioni, utenti, catalogo, commenti, prestiti, solleciti e prenotazioni | Traccia esplicita ma incompleta; adozione da confermare | `5. Object Oriented Analysis/BibliotecaDdd_4Nov2026-refined.pdf`, p. 1 |
-| Carico, tempi di risposta, accessibilità, autenticazione e log della rete bibliotecaria | Requisiti espliciti di un esempio distinto; non trasferiti alla candidata traccia DDD | `5. Object Oriented Analysis/An example of problem statement - Rete Biblioteche.pdf`, p. 1 |
-| Varianti di consultazione disponibilità, conferma del prestito e notifiche/estensioni | Varianti esplicitamente suggerite, non decisioni definitive | Stesso PDF, p. 1 |
-| Casi d'uso, attori e classi elencati nella sezione UML | Contenuto di un modello di esercitazione | `5. Object Oriented Analysis/BibliotecaDdd_4Novembre26.mdj`; testo di accompagnamento, PDF pp. 2-3 |
-| Architettura layered stile JavaEE/Jakarta | Annotazione/esempio da continuare, non requisito vincolante | `BibliotecaDdd_4Nov2026-refined.pdf`, p. 3 |
-| Tre modalità di progetto e loro ambito | Indicazione del corso; modalità scelta mancante | `SWE25_disciplinareDiEsame_Vers1.2.pdf`, pp. 5-8 |
-| Report e requisiti obbligatori/raccomandati in modalità 2 | Vincolo/indicazione del corso, applicabile se scelta modalità 2 | Stesso PDF, pp. 18-25 |
-| Consegna e uso dell'AI | Indicazioni del corso per l'esame e la relazione | Stesso PDF, pp. 2-4 |
-| Versione Java, build, framework, database e UI | Informazione non trovata | Fonti esaminate; nessuna scelta confermata |
+Altri esempi esaminati, tra cui `An example of problem statement - Rete Biblioteche.pdf`, `ApplicazioneViola_ScuolaDiMedicina.pdf` e `BibliotecaDdd_4Nov2026-refined.pdf`, sono stati consultati esclusivamente per distinguere i principi generali dai dati specifici di un esempio; numeri, funzioni e modelli di quei domini non sono trasferiti al progetto. Gli altri materiali della cartella (esercizi, modelli UML, codice, presentazioni, documenti e immagini di lezione) non definiscono requisiti del prodotto. Le 22 immagini autonome e le pagine dei PDF contenenti immagini sono state renderizzate e sottoposte a controllo visivo; sono schemi, diagrammi e annotazioni didattiche. Non si sono riscontrati problemi di apertura dei PDF o delle immagini. Eventuali ambiguità nelle dispense sono gestite mantenendo come riferimento il disciplinare v1.2 e lasciando aperte le decisioni non definite.
