@@ -17,7 +17,7 @@ Aggiornare questo piano insieme a `FEATURES.md` ogni volta che cambia lo stato d
 
 | Fase | Obiettivo | Stato |
 |---|---|---|
-| 1. Modello concettuale e relazioni | Distinguere framework generico e istanza per film; fissare le associazioni, le cardinalità e i vincoli approvati; isolare le domande da sottoporre all'autore prima di vincolare lo schema. | **A buon punto** |
+| 1. Modello concettuale e relazioni | Distinguere framework generico e istanza per film; fissare le associazioni, le cardinalità e i vincoli approvati; isolare le domande da sottoporre all'autore prima di vincolare lo schema. | **Finito** |
 | 2. Nucleo del framework | Modellare i concetti generici e le regole indipendenti dalla persistenza e dalla UI; verificare le invarianti con test di dominio. | **Non iniziato** |
 | 3. Servizi e associazioni | Implementare i casi d'uso e le relazioni tra profili, media, sezioni e autori; provarli con repository sostitutivi in memoria. | **Non iniziato** |
 | 4. Persistenza relazionale con ORM | Scegliere l'ORM con l'autore, mappare i concetti nel database locale e verificare salvataggio, lettura, vincoli e relazioni con prove d'integrazione. | **Non iniziato** |
@@ -27,31 +27,40 @@ Aggiornare questo piano insieme a `FEATURES.md` ogni volta che cambia lo stato d
 
 ## Fase 1 — Primo modello concettuale
 
-Questa fase è stata svolta come prima analisi del dominio e delle sue relazioni. **Un film è l'istanza concreta di un media nel framework**; allo stesso modo, un genere è una sezione e un autore di film è un autore/contributore. Le decisioni qui sotto sono separate dalle questioni ancora da approvare.
+Questa fase è stata revisionata dall'autore. **Un film è un media nel framework**; un genere è una sezione e un autore di film è un autore/contributore. I profili condividono il catalogo globale; soltanto le loro preferenze sono personali.
 
 ### Relazioni approvate o direttamente espresse
 
 | Relazione | Interpretazione per il dominio film |
 |---|---|
-| Profilo — media preferiti | Ogni profilo può riferirsi a media preferiti. Le preferenze della sezione «Preferiti» appartengono al profilo attivo. |
-| Profilo — autori preferiti | Ogni profilo può riferirsi ad autori preferiti; la loro presentazione nell'interfaccia resta da definire. |
-| Sezione — media | Una sezione contiene media. Nel caso film è un genere e un film può appartenere a più generi; una sezione vuota deve poter essere rappresentata e mostrata. |
-| Autore — media | Gli autori sono associati ai media che hanno prodotto. Nel form film richiesto dall'autore si seleziona un autore per film; un autore può essere collegato a più film. |
-| Autore — generi | Nel catalogo film l'elenco dei generi di un autore si ricava dai suoi film e dai generi di ciascun film; il numero mostrato è il conteggio dei film per genere. È una relazione derivata, non una nuova associazione autonoma richiesta. |
+| Profilo — media preferiti | Molti-a-molti: un profilo può preferire più media e lo stesso media può essere preferito da più profili. Le preferenze della sezione «Preferiti» appartengono al profilo attivo. |
+| Profilo — autori preferiti | Molti-a-molti: un profilo può preferire più autori e lo stesso autore può essere preferito da più profili. |
+| Sezione — media | Molti-a-molti e facoltativa da entrambi i lati: una sezione può essere vuota e un media può non avere sezioni. Nel caso film, il media è il film e la sezione è il genere. |
+| Autore — media | Uno-a-molti: ogni media ha esattamente un autore; un autore può essere associato a zero o più media. Quando più persone hanno contribuito, l'utente sceglie quale autore associare. La stessa cardinalità vale nel framework generico e nell'istanza film. |
+| Autore — sezioni | Relazione derivata attraverso i media dell'autore e le sezioni di ciascun media. Il conteggio per genere è calcolato; non è un'associazione autonoma da duplicare nello schema. |
+| Profilo — catalogo | Nessuna relazione di proprietà: contenuti aggiunti da qualunque profilo sono condivisi con tutti. Non sono previsti contenuti privati. |
+| Profilo — cancellazione | Dopo la conferma, si elimina il profilo e si cancellano le sue sole relazioni di preferenza. Media, sezioni e autori condivisi rimangono nel catalogo. |
 
-### Decisioni preliminari e domande aperte
+### Campi obbligatori e fallback visivi
 
-- **Profilo–preferenze** — La rappresentazione molti-a-molti è la candidata naturale per utenti che scelgono media/autori e media/autori preferiti da profili diversi. La condivisione del catalogo tra profili e la cardinalità definitiva saranno confermate prima di fissare lo schema.
-- **Autore–media nel framework** — La specializzazione film prevede il campo singolo richiesto dall'autore. Resta da stabilire se il framework generico consenta più autori/contributori per lo stesso media.
-- **Sezione–media** — La relazione molti-a-molti è necessaria per i film multi-genere. Resta da chiarire se un film possa essere salvato senza genere; le sezioni vuote sono invece necessarie per il comportamento di navigazione richiesto.
-- **Visibilità e proprietà del catalogo** — Non è ancora definito se film, sezioni e autori siano condivisi tra tutti i profili dell'installazione o se esista un concetto di proprietà per singolo profilo. Non introdurre una relazione di proprietà senza conferma.
-- **Cancellazioni** — La conferma prima della cancellazione del profilo è richiesta; non è ancora deciso se le preferenze vengano rimosse, se altri dati vadano conservati o come trattare gli elementi non più associati.
-- **File** — Non è ancora deciso se conservare percorsi originali o copiare i file, né come trattare immagini o video spostati, mancanti o non leggibili.
-- **Unicità e campi obbligatori** — Unicità di nomi di profili, generi e autori, obbligatorietà di foto profilo/locandina e validazioni dei file vanno definite prima dei rispettivi casi d'uso.
+- Profilo: il solo nome è obbligatorio. La foto può mancare; mostrare un colore saturo casuale e l'iniziale del nome.
+- Media (film): file e titolo sono gli unici campi obbligatori tra i dati propri del media. L'associazione con un autore è obbligatoria; descrizione, copertina caricata e sezioni possono mancare. Il catalogo fornisce comunque una copertina visiva; nell'istanza film il fallback è un'immagine verticale con colore saturo casuale e titolo centrato e adattato allo spazio.
+- Autore: il solo nome è obbligatorio. Foto e descrizione possono mancare; il fallback per la foto usa colore saturo casuale e iniziale del nome. Il flusso di creazione rapida può quindi richiedere il solo nome.
+- Sezione (genere): il solo nome è obbligatorio e può non avere media associati.
+- L'applicazione mette a disposizione cartelle suggerite separate per video e locandine, ma non obbliga a usarle. Il database memorizza il percorso del file fornito dall'utente; l'implementazione può copiare file in un'area gestita, ma deve conservare il percorso fornito.
+- La copertina caricata per un film è verticale, rapporto 3:4 (4:3 verticale), con avviso del ritaglio. Profili, autori e locandine mancanti hanno un segnaposto invece di un file immagine obbligatorio.
+- Colore del segnaposto e percorso immagine sono concetti distinti: non trattare un valore colore come se fosse un percorso fisico. La rappresentazione del segnaposto (generazione a runtime, file generato o altro meccanismo esplicito) resta una scelta implementativa.
+
+### Aspetti ancora da definire in fasi successive
+
+- **Segnaposto** — Il comportamento visivo è deciso, ma la rappresentazione tecnica va progettata mantenendo separato il riferimento a un'immagine dal colore e dal testo generati. Il colore pseudo-casuale potrà essere persistente o stabile per identità; questa scelta non è ancora necessaria per il modello concettuale.
+- **File** — Il riferimento al percorso scelto è richiesto; il meccanismo opzionale di copia e il comportamento se un file viene spostato, eliminato o diventa illeggibile andranno precisati con la persistenza e i flussi di errore.
+- **Unicità e confronti** — Non sono ancora fissate l'unicità dei nomi, la normalizzazione di testo o le regole esatte per confrontare titoli nell'ordinamento alfabetico.
+- **Interfaccia** — È ancora da definire come le preferenze di autori si rendono consultabili, oltre alla sezione dei media preferiti.
 
 ### Criterio di uscita della fase
 
-La fase 1 sarà **Finita** quando l'autore avrà revisionato e approvato le cardinalità e le regole necessarie a progettare le associazioni, incluse proprietà/condivisione del catalogo, autore per media, generi e cancellazioni. La presente mappa non è ancora un diagramma UML o uno schema relazionale definitivo; non codificare come fatti le interpretazioni in attesa di conferma.
+La fase 1 è **Finita**: l'autore ha approvato condivisione, cardinalità, dati obbligatori, facoltatività delle sezioni e comportamento relazionale della cancellazione del profilo. Questa è la decisione concettuale di base, non ancora il diagramma UML o lo schema relazionale implementativo.
 
 ## Fasi successive: risultato e verifica prevista
 
@@ -61,23 +70,23 @@ Definire i tipi e le regole di dominio riutilizzabili senza dipendere da film, S
 
 ### Fase 3 — Servizi e associazioni
 
-Implementare operazioni applicative per i flussi approvati. Usare repository sostitutivi in memoria per verificare casi normali, alternative, errori, ordinamenti e associazioni senza database definitivo. I sostituti implementano le stesse interfacce usate poi dalla persistenza, così i test e la UI attraversano i medesimi servizi.
+Implementare operazioni applicative per i flussi approvati. Usare repository sostitutivi in memoria per verificare casi normali, alternative, errori, ordinamenti e associazioni senza database definitivo. Verificare in particolare che i contenuti siano globali, mentre le preferenze siano isolate per profilo, e che eliminare un profilo rimuova solo le sue preferenze. I sostituti implementano le stesse interfacce usate poi dalla persistenza, così i test e la UI attraversano i medesimi servizi.
 
 ### Fase 4 — Persistenza
 
-Solo dopo la scelta dell'ORM e delle regole di integrità, implementare lo schema e le mappature. Verificare con dati temporanei la rilettura delle relazioni, l'isolamento delle preferenze, i film multi-genere e le regole di cancellazione approvate. Non trattare i test in memoria come prova della correttezza del database.
+Solo dopo la scelta dell'ORM e delle regole di integrità, implementare lo schema e le mappature. Verificare con dati temporanei la rilettura delle relazioni molti-a-molti, l'isolamento delle preferenze, i media senza sezioni, i film multi-genere e la cancellazione del profilo senza rimozione del catalogo. Non trattare i test in memoria come prova della correttezza del database.
 
 ### Fase 5 — Profili e interfaccia essenziale
 
-Il prototipo attuale contiene la selezione e la creazione del profilo, ma va ancora ricompilato dopo una correzione e non è verificato. Usarlo come punto di partenza, riallineandolo ai servizi e alla persistenza scelti. Realizzare la UI dei profili e verificare ogni flusso sia a livello di servizio/controller sia manualmente nella schermata; aggiungere modifica, cancellazione confermata e foto profilo quando i relativi comportamenti saranno definiti.
+Il prototipo attuale contiene la selezione e la creazione del profilo, ma va ancora ricompilato dopo una correzione e non è verificato. Usarlo come punto di partenza, riallineandolo ai servizi e alla persistenza scelti. Completare la UI dei profili con nome obbligatorio, foto facoltativa, modifica e cancellazione confermata; alla cancellazione eliminare solo profilo e preferenze. Verificare ogni flusso a livello di servizio/controller e manualmente nella schermata, includendo l'avatar segnaposto con iniziale.
 
 ### Fase 6 — Consultazione e ricerca
 
-Preparare una vista di catalogo con un insieme piccolo e controllato di profili, media, generi e autori. Verificare prima l'ordinamento dei servizi/query; usare la schermata per controllare che le sezioni popolate precedano quelle vuote, che i titoli siano ordinati e che «Preferiti» dipenda dal profilo attivo. Implementare ricerca solo dopo aver definito i campi e le regole di corrispondenza.
+Preparare una vista di catalogo con un insieme piccolo e controllato di profili, media, generi e autori condivisi. Verificare prima l'ordinamento dei servizi/query; usare la schermata per controllare che le sezioni popolate precedano quelle vuote, che i titoli siano ordinati e che «Preferiti» dipenda dal profilo attivo. Implementare ricerca solo dopo aver definito i campi e le regole di corrispondenza.
 
 ### Fase 7 — Inserimento e gestione
 
-Costruire verticalmente i flussi: creazione autonoma di genere usando film esistenti; creazione autonoma di autore usando film esistenti e dati opzionali; aggiunta di film con selezione di file, generi e autore. Le scorciatoie di creazione sono solo nel form film. Verificare i servizi senza UI, poi percorrere i form essenziali e le associazioni persistenti. Aggiornare relazione e istruzioni d'uso soltanto con comportamenti verificati.
+Costruire verticalmente i flussi: creazione autonoma di genere usando zero o più film esistenti; creazione autonoma di autore usando zero o più film esistenti e soli nome obbligatorio; aggiunta di film (media) con file e titolo obbligatori, autore obbligatorio (creabile al volo con il solo nome), descrizione, locandina e generi facoltativi. Le scorciatoie di creazione di genere/autore sono solo nel form film. Offrire cartelle facoltative per video e locandine, lasciando scegliere qualunque percorso accessibile. Verificare i servizi senza UI, poi percorrere i form essenziali e le associazioni persistenti. Aggiornare relazione e istruzioni d'uso soltanto con comportamenti verificati.
 
 ## Regola d'aggiornamento
 

@@ -4,7 +4,7 @@ Applicazione desktop Java per esplorare e organizzare un catalogo multimediale l
 
 Il lavoro privilegia modello di dominio, servizi, relazioni e persistenza. L'interfaccia serve a esplorare e verificare il sistema e non ne costituisce l'obiettivo principale.
 
-La roadmap incrementale con lo stato delle fasi è in [`IMPLEMENTATION.md`](IMPLEMENTATION.md).
+Nel disegno approvato, tutti i profili condividono media, sezioni e autori; soltanto le preferenze appartengono al singolo profilo. Il dettaglio delle fasi è nella [roadmap](IMPLEMENTATION.md).
 
 ## Stato attuale
 
