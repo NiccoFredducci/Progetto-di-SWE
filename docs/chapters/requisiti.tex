@@ -1,26 +1,20 @@
-\chapter{Requisiti}
+\chapter{Requisiti e modello funzionale}
 
-\section{Attori e confine del sistema}
-L'attore primario previsto è una persona che usa l'applicazione locale, seleziona il proprio profilo e consulta o arricchisce il catalogo. Il profilo identifica preferenze personali; il catalogo contiene media, sezioni e autori associati. Non sono al momento definiti ruoli amministrativi distinti, autenticazione con credenziali o uso concorrente da parte di più installazioni.
+\section{Confine e attore}
+Il sistema è un'applicazione locale usata da persone che operano sul catalogo attraverso un profilo. Il profilo individua preferenze personali; media, sezioni e autori appartengono invece a un catalogo condiviso. L'incremento descritto in questa relazione formalizza e modella il nucleo di questi concetti, senza attribuire al profilo la proprietà dei contenuti.
 
-\section{Funzioni approvate}
-L'ambito funzionale comprende la creazione, modifica e cancellazione confermata del profilo; la selezione di preferenze per media e autori; ricerca e consultazione organizzata del catalogo; aggiunta di film (media) con file video, titolo, locandina, descrizione, generi (sezioni) e autore; aggiunta indipendente di generi (sezioni) e autori associati a elementi già esistenti. I flussi di creazione rapida di genere e autore sono ammessi nel form del film, mentre i form autonomi di genere e autore non creano film.
+\section{Regole del dominio affrontate}
+Il modello generico considera quattro entità:
+\begin{itemize}
+  \item un \textbf{profilo}, identificato da un nome obbligatorio, con foto facoltativa e preferenze personali per media e autori;
+  \item un \textbf{media}, identificato dai dati obbligatori file e titolo, con descrizione e copertina facoltative e un solo autore associato;
+  \item una \textbf{sezione}, identificata da un nome obbligatorio;
+  \item un \textbf{autore/contributore}, identificato da un nome obbligatorio, con foto e descrizione facoltative.
+\end{itemize}
 
-Tutti i profili condividono media, sezioni e autori; le preferenze sono invece personali. Le associazioni profilo-media preferito e profilo-autore preferito sono molti-a-molti. Cancellare un profilo dopo conferma rimuove il profilo e le sue preferenze, non gli elementi condivisi.
+Le preferenze profilo-media e profilo-autore sono molti-a-molti. La relazione media-sezione è molti-a-molti e facoltativa su entrambi i lati: il media può non appartenere a sezioni e una sezione può essere vuota. Ogni media ha esattamente un autore; un autore può essere associato a nessuno o a più media. Gli elementi del catalogo sono condivisi tra i profili, mentre le preferenze restano personali.
 
-Nel framework, la relazione media-sezione è molti-a-molti e facoltativa da entrambi i lati: un media può non avere sezioni e una sezione può non avere media. Nel catalogo di film, la sezione dei preferiti è mostrata se esistono media preferiti. Le sezioni con film precedono quelle vuote; ciascun gruppo di sezioni è alfabetico e i film di ogni sezione sono alfabetici per titolo. Un film può appartenere a più generi, ma non è obbligatorio assegnargliene uno. I generi associati ai film di un autore sono ordinati per numero di opere decrescente e, a parità, alfabeticamente.
+I nomi delle sezioni sono univoci nel catalogo: non possono esistere due sezioni con lo stesso nome.
 
-Sono obbligatori soltanto il nome per profilo, autore e sezione e il file e il titolo come dati propri del media (film). Ogni media deve inoltre essere associato a un autore. Descrizioni, foto e generi possono mancare. La locandina caricata è facoltativa, ma ogni media deve avere una copertina visiva: quando manca, l'istanza film mostra un segnaposto verticale con colore saturo casuale e titolo centrato e adattato. Profilo e autore senza foto mostrano un segnaposto con colore saturo casuale e iniziale del nome.
-
-I dettagli dei casi d'uso, dei flussi alternativi e delle schermate verranno precisati progressivamente con l'autore. La ricerca non ha ancora un criterio definito per campi, confronto o presentazione dei risultati.
-
-\section{Casi d'uso}
-I diagrammi e i template saranno derivati dalle funzioni approvate e resi coerenti tra loro. Non vengono inseriti diagrammi automatici o una decomposizione d'interfaccia presentata come modello funzionale. Tra i casi da specificare figurano gestione del profilo, gestione delle preferenze, consultazione e ricerca, aggiunta di film, aggiunta di generi e aggiunta di autori.
-
-\section{Mockup e navigazione}
-L'interfaccia è un supporto secondario per rendere osservabili le operazioni del framework e della specializzazione. I dettagli visuali e la navigazione saranno definiti per singola funzione; non sono un presupposto per anticipare la progettazione del dominio o dei servizi.
-
-\section{Requisiti di qualità e punti aperti}
-Il contesto approvato è locale e il sistema dovrà conservare dati e associazioni necessari al catalogo. Criteri quantitativi di prestazione, accessibilità e altri obiettivi di qualità non sono ancora stati fissati.
-
-Restano da precisare i campi della ricerca, le regole di confronto alfabetico, la reazione ai file spostati o mancanti e la rappresentazione tecnica dei segnaposto. L'applicazione mette a disposizione cartelle consigliate separate per video e locandine, senza obbligare a usarle: l'utente può selezionare file da qualunque percorso e il database conserva quello indicato. Un'eventuale copia gestita dall'applicazione è facoltativa. Il colore del segnaposto deve essere rappresentato separatamente dal percorso di un'immagine reale.
+\section{Istanza per film}
+Nel dominio applicativo, un film è un media, un genere è una sezione e l'autore di film è un autore/contributore. Un film può appartenere a più generi o a nessuno. Questa relazione usa la terminologia generica nel modello e quella specifica del catalogo solo quando descrive l'istanza.

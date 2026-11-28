@@ -1,13 +1,19 @@
 \chapter{Implementazione}
-% Appunti di tracciamento, non testo finale della relazione (da redigere a cura dell'autore).
-% Primo incremento in corso: profili utente, lettura e creazione su database locale, singola schermata Swing.
-% Struttura sorgente: domain/User; application/UserService; persistence/UserRepository e adapter SQLite/JDBC; ui/SignInWindow; Main.
-% Configurazione scelta: JDK 27, compilazione con --release 27 e Maven Compiler Plugin 3.16.0; compilazione non ancora verificata in questo ambiente.
-% Persistenza corrente: tabella users con id e name; schema inizializzato all'avvio. Nessun dato preferito o schermata successiva è incluso in questo incremento.
-% Verifica di compilazione/esecuzione non effettuata: ambiente rilevato senza JDK, Maven o driver SQLite già disponibile.
 
-\section{Responsabilità dei componenti}
-% Descrivere e motivare le responsabilità effettivamente confermate dall'autore.
+\section{Nucleo generico}
+Il package \texttt{framework.domain} contiene quattro entità generiche:
+\begin{itemize}
+  \item \texttt{CatalogProfile}, con nome, foto facoltativa e insiemi personali di preferenze per media e autori;
+  \item \texttt{CatalogMedia}, con percorso file e titolo obbligatori, dati descrittivi e copertina facoltativi, un autore e un insieme di sezioni;
+  \item \texttt{CatalogSection}, identificata dal nome;
+  \item \texttt{CatalogAuthor}, con nome obbligatorio e foto e descrizione facoltative.
+\end{itemize}
 
-\section{Dettagli implementativi significativi}
-% Aggiungere estratti selezionati e motivati solo dopo verifica del comportamento.
+Ogni entità ha un UUID. I metodi factory \texttt{create} generano un nuovo identificatore e inizializzano i dati facoltativi o le collezioni vuote.
+
+\texttt{CatalogMedia} usa \texttt{java.nio.file.Path} per rappresentare un file senza vincolare il framework a un formato o a un tipo di media specifico. L'autore è richiesto tramite il suo UUID, mentre le sezioni sono rappresentate da un insieme di UUID. \texttt{CatalogProfile} mantiene separatamente gli ID dei media e degli autori preferiti. Le operazioni di aggiunta e rimozione delle preferenze restituiscono una nuova istanza del profilo; le collezioni esposte non possono essere modificate dal chiamante.
+
+La validazione di ogni entità si limita ai vincoli locali del suo oggetto. Non esegue accessi a file, database o interfaccia grafica.
+
+\section{Tecnologie del modello e dei test}
+Il progetto è compilato con Maven per Java 27. I test del nucleo usano JUnit 5 e vengono eseguiti nella fase di test Maven tramite Surefire. Il progetto include inoltre il prototipo preesistente di selezione profilo con interfaccia Swing e accesso SQLite tramite JDBC; il package generico di dominio non dipende da tali componenti.

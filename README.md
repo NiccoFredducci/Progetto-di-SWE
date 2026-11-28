@@ -8,9 +8,7 @@ Nel disegno approvato, tutti i profili condividono media, sezioni e autori; solt
 
 ## Stato attuale
 
-Il prototipo contiene una schermata iniziale di selezione profilo che legge i profili dal database locale e consente di selezionarne o crearne uno. Non apre ancora le schermate del catalogo.
-
-L'ultima compilazione effettuata ha rilevato un conflitto di nome con un metodo Swing; il metodo è stato rinominato, ma la build deve ancora essere rilanciata per verificare la correzione. La schermata e il salvataggio dei profili non sono quindi ancora dichiarati verificati.
+Il prototipo contiene una schermata iniziale di selezione profilo che legge i profili dal database locale e consente di selezionarne o crearne uno. È presente anche il primo modello generico del framework (`CatalogProfile`, `CatalogMedia`, `CatalogSection`, `CatalogAuthor`), indipendente dalla UI e dal database, verificato da otto test unitari superati. La schermata iniziale non apre altre viste del catalogo.
 
 ## Cosa installare
 
@@ -41,6 +39,18 @@ mvn clean compile exec:java
 ```
 
 La prima esecuzione può richiedere qualche minuto per scaricare le dipendenze. La finestra dell'applicazione rimane aperta finché non viene chiusa.
+
+## Eseguire i test
+
+I test automatici usano JUnit 5 e Maven Surefire; non richiedono l'installazione separata di JUnit. Dalla cartella principale, con JDK 27 e Maven configurati come sopra, esegui:
+
+```powershell
+mvn clean test
+```
+
+Maven scarica le dipendenze di test al primo utilizzo. `clean` elimina gli artefatti generati in `target` e forza la ricompilazione; è utile anche se VS Code ha lasciato lì classi obsolete. Gli otto test correnti verificano il nucleo generico del dominio (campi obbligatori, preferenze, associazioni media-sezione e sezioni vuote) e sono stati superati.
+
+La console mantiene il riepilogo standard di Maven/Surefire, senza stampe aggiuntive per ogni asserzione. I metodi di test hanno nomi descrittivi in italiano e descrizioni JUnit leggibili negli ambienti compatibili. I risultati dettagliati sono consultabili nei file generati in `target/surefire-reports/`; la relazione LaTeX collega ciascun caso alla regola di dominio verificata.
 
 ## Uso attualmente previsto
 

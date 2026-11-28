@@ -1,41 +1,29 @@
 \chapter{Progettazione}
 
-\section{Direzione architetturale}
-La direzione di progetto distingue un framework di catalogo riutilizzabile da una sua istanza per il dominio dei film. Il docente ha consigliato di focalizzare il lavoro su modello di dominio e servizi, persistenza tramite ORM e controller verso l'interfaccia; l'autore ha adottato tale direzione. La GUI rimane uno strumento d'esplorazione e verifica.
+\section{Modello di dominio}
+Il modello del framework è collocato nel package di dominio generico \texttt{framework.domain} ed è composto da \texttt{CatalogProfile}, \texttt{CatalogMedia}, \texttt{CatalogSection} e \texttt{CatalogAuthor}. Il prefisso \texttt{Catalog} identifica i concetti generici, distinti dalla terminologia dell'istanza per film.
 
-La separazione concreta dei moduli, i contratti d'estensione del framework e l'ORM da utilizzare devono ancora essere progettati e motivati. Il prototipo corrente accede a SQLite tramite JDBC; non va confuso con la direzione architetturale desiderata per il sistema completo.
-
-\section{Modello di dominio iniziale}
-I concetti generici individuati sono profilo utente, preferenza, sezione, media collegato a un file e autore o contributore. Il caso concreto li specializza come profilo con preferenze per media e autori, genere (sezione), film (media) riferito a un video locale e autore associato alle opere. Le relazioni del catalogo film sono istanze delle relazioni del framework, non una definizione alternativa dei concetti generici.
-
-La prima mappa distingue le cardinalità approvate e il loro significato nell'istanza:
+Le entità sono identificate da UUID. Le associazioni sono rappresentate mediante gli identificatori delle entità correlate: il profilo conserva insiemi separati di media e autori preferiti; il media conserva l'identificatore dell'autore richiesto e un insieme, eventualmente vuoto, di sezioni. Il modello non mantiene collezioni inverse duplicate.
 
 \begin{center}
 \small
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{|p{3.0cm}|p{4.0cm}|p{8.1cm}|}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{3.2cm}|p{3cm}|p{8.4cm}|}
 \hline
-\textbf{Relazione} & \textbf{Istanza per film} & \textbf{Stato e nota} \\
+\textbf{Associazione} & \textbf{Molteplicità} & \textbf{Rappresentazione nel modello} \\
 \hline
-Profilo--media preferiti & Profilo--film preferiti & Molti-a-molti. Le preferenze appartengono al profilo; il media resta condiviso nel catalogo globale. \\
+Profilo--media preferiti & molti-a-molti & Insieme di ID media nel profilo \\
 \hline
-Profilo--autori preferiti & Profilo--autori di film preferiti & Molti-a-molti. La preferenza è personale, l'autore resta condiviso. \\
+Profilo--autori preferiti & molti-a-molti & Insieme di ID autori nel profilo \\
 \hline
-Sezione--media & Genere--film & Molti-a-molti, facoltativa da entrambi i lati: un media può non avere sezioni e una sezione può essere vuota. Nel caso film sono ammessi più generi; l'istanza può mostrare o nascondere sezioni vuote. \\
+Media--sezione & molti-a-molti, facoltativa & Insieme di zero o più ID sezione nel media; una sezione può non essere associata \\
 \hline
-Autore--media & Autore di film--film & Ogni media ha esattamente un autore; un autore può avere zero o più media. Se più persone hanno contribuito, l'utente sceglie quale associare. Il limite vale anche nel framework generico. \\
-\hline
-Autore--sezione & Autore di film--generi & Relazione derivata dai media dell'autore e dalle loro sezioni; il conteggio per genere è calcolato, non una nuova associazione autonoma. \\
+Media--autore & media: uno; autore: zero o più & Un ID autore obbligatorio nel media \\
 \hline
 \end{tabular}
 \end{center}
 
-La cancellazione confermata di un profilo elimina il profilo e le sue associazioni di preferenza; non elimina film/media, sezioni o autori condivisi. I campi propri obbligatori sono: nome per profilo, autore e sezione; file e titolo per media. La descrizione, le foto e le sezioni di un media possono mancare; la relazione con un autore è invece obbligatoria.
+\section{Vincoli rappresentati}
+I costruttori verificano la presenza degli identificatori obbligatori e dei dati testuali richiesti: il nome per profilo, autore e sezione; titolo, percorso file e autore per media. Le descrizioni, le fotografie, la copertina e le sezioni di un media possono essere assenti. Gli insiemi di associazioni sono copiati all'ingresso e restituiti come collezioni non modificabili.
 
-\section{Modello dei dati}
-L'applicazione conserva localmente le entità e le associazioni necessarie. Il prototipo utilizza attualmente SQLite; la strategia di persistenza e la mappatura ORM definitive saranno documentate dopo la loro scelta. Il modello relazionale dovrà rendere esplicite le chiavi, le cardinalità, i vincoli d'integrità e il comportamento delle cancellazioni.
-
-Il database conserva il percorso indicato dall'utente, qualunque sia la cartella scelta; l'applicazione mette a disposizione cartelle consigliate separate per video e locandine ma non le impone. La copia facoltativa dei file in un'area gestita non deve far perdere il percorso fornito. Foto e copertine mancanti sono sostituite visivamente da segnaposto con colore saturo casuale e iniziale o titolo. Colore e testo di un segnaposto devono restare distinti dal percorso di un file immagine reale; la rappresentazione tecnica va ancora progettata. La gestione di riferimenti successivamente spostati o rimossi sarà precisata insieme ai flussi di errore.
-
-\section{Diagrammi}
-I diagrammi dei package, delle classi e del database saranno elaborati come artefatti progettuali a partire dai requisiti e dalle cardinalità approvate. Non sono ancora inclusi perché i confini del framework e alcune associazioni sono in fase di definizione.
+Il modello rappresenta riferimenti, non possiede il catalogo condiviso e non controlla che gli identificatori associati corrispondano a entità esistenti.

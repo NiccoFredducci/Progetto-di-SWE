@@ -18,7 +18,7 @@ Aggiornare questo piano insieme a `FEATURES.md` ogni volta che cambia lo stato d
 | Fase | Obiettivo | Stato |
 |---|---|---|
 | 1. Modello concettuale e relazioni | Distinguere framework generico e istanza per film; fissare le associazioni, le cardinalità e i vincoli approvati; isolare le domande da sottoporre all'autore prima di vincolare lo schema. | **Finito** |
-| 2. Nucleo del framework | Modellare i concetti generici e le regole indipendenti dalla persistenza e dalla UI; verificare le invarianti con test di dominio. | **Non iniziato** |
+| 2. Nucleo del framework | Modellare i concetti generici e le regole indipendenti dalla persistenza e dalla UI; verificare le invarianti con test di dominio. | **Finito** |
 | 3. Servizi e associazioni | Implementare i casi d'uso e le relazioni tra profili, media, sezioni e autori; provarli con repository sostitutivi in memoria. | **Non iniziato** |
 | 4. Persistenza relazionale con ORM | Scegliere l'ORM con l'autore, mappare i concetti nel database locale e verificare salvataggio, lettura, vincoli e relazioni con prove d'integrazione. | **Non iniziato** |
 | 5. Profili e interfaccia essenziale | Allineare selezione, creazione, modifica e cancellazione confermata dei profili ai servizi del framework; aggiungere la scelta della foto e verificarne i flussi. | **Iniziato** |
@@ -66,11 +66,15 @@ La fase 1 è **Finita**: l'autore ha approvato condivisione, cardinalità, dati 
 
 ### Fase 2 — Nucleo del framework
 
-Definire i tipi e le regole di dominio riutilizzabili senza dipendere da film, Swing o database. Il test di dominio deve poter usare un media di prova generico e non richiedere che esistano già form, autori completi o file video reali. Non creare oggetti di catalogo incompleti se violano invarianti che l'autore avrà approvato.
+Sono stati introdotti `CatalogProfile`, `CatalogMedia`, `CatalogSection` e `CatalogAuthor` nel package `framework.domain`, con identificatori UUID e collezioni di associazioni non modificabili dall'esterno. Il modello non dipende da Swing o dalla persistenza e usa file generici (`Path`); le associazioni di un media fanno riferimento a un singolo autore obbligatorio e a zero o più sezioni. Le preferenze del profilo sono insiemi personali di ID, mentre gli elementi condivisi non contengono un proprietario.
+
+Gli otto test unitari del dominio sono stati eseguiti e superati. Coprono campi obbligatori e facoltativi, media senza sezioni, più sezioni per media, preferenze indipendenti e insiemi non modificabili. La fase è Finita per il perimetro del modello generico e delle sue invarianti locali.
+
+Confine di questo incremento: il modello descrive i riferimenti alle entità, ma non verifica che gli ID associati esistano. Tale coerenza referenziale e l'unicità dei nomi delle sezioni appartengono ai servizi e alla persistenza delle fasi successive. Il modello non genera copertine/avatar e non impone l'esistenza fisica dei percorsi, in modo da non confondere riferimenti a file, segnaposto e regole dell'istanza film.
 
 ### Fase 3 — Servizi e associazioni
 
-Implementare operazioni applicative per i flussi approvati. Usare repository sostitutivi in memoria per verificare casi normali, alternative, errori, ordinamenti e associazioni senza database definitivo. Verificare in particolare che i contenuti siano globali, mentre le preferenze siano isolate per profilo, e che eliminare un profilo rimuova solo le sue preferenze. I sostituti implementano le stesse interfacce usate poi dalla persistenza, così i test e la UI attraversano i medesimi servizi.
+Implementare operazioni applicative per i flussi approvati. Usare repository sostitutivi in memoria per verificare casi normali, alternative, errori, ordinamenti e associazioni senza database definitivo. Verificare in particolare che i contenuti siano globali, mentre le preferenze siano isolate per profilo, che eliminare un profilo rimuova solo le sue preferenze e che il catalogo rifiuti due sezioni con lo stesso nome. La regola di unicità è a livello di insieme/catalogo, non del singolo oggetto sezione; la semantica del confronto tra nomi (maiuscole/minuscole e normalizzazione) va decisa prima di implementarla. I sostituti implementano le stesse interfacce usate poi dalla persistenza, così i test e la UI attraversano i medesimi servizi.
 
 ### Fase 4 — Persistenza
 

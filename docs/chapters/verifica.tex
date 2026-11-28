@@ -1,9 +1,32 @@
 \chapter{Verifica}
-\section{Test funzionali e d'integrazione}
-% Collegare i casi di test ai casi d'uso e riportare solo esiti effettivamente osservati.
 
-\section{Test unitari e strutturali}
-% Documentare unità, condizioni e rami verificati, senza dichiarare copertura non misurata.
+\section{Test unitari del modello}
+Il nucleo è verificato con otto test JUnit 5. I metodi hanno nomi descrittivi in italiano; le annotazioni \texttt{@DisplayName} forniscono una descrizione estesa negli ambienti compatibili. La tabella collega le prove alle regole di dominio:
 
-\section{Limiti della verifica}
-% Aggiornare con le verifiche non eseguite e le ragioni.
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{5.2cm}|p{9.4cm}|}
+\hline
+\textbf{Caso di test} & \textbf{Regola verificata} \\
+\hline
+Profilo con nome e dati facoltativi assenti & Il nome è obbligatorio; foto e preferenze possono iniziare assenti. \\
+\hline
+Rifiuto del nome profilo assente o vuoto & Il profilo non accetta un nome nullo o composto solo da spazi. \\
+\hline
+Preferenze personali e non modificabili & Profili distinti possono preferire gli stessi media e autori; modificare le preferenze restituisce un nuovo profilo e non espone insiemi modificabili. \\
+\hline
+Media con autore e senza sezioni & File, titolo e un autore sono obbligatori; le sezioni possono essere assenti. \\
+\hline
+Rifiuto dei dati obbligatori del media mancanti & Il media rifiuta file o autore assenti e titolo vuoto. \\
+\hline
+Media associato a più sezioni & Sono ammesse più sezioni e l'insieme ricevuto viene copiato e protetto da modifiche esterne. \\
+\hline
+Sezione vuota con nome obbligatorio & Una sezione può non avere media associati, ma richiede un nome valido. \\
+\hline
+Autore con il solo nome & Foto e descrizione dell'autore possono essere assenti. \\
+\hline
+\end{tabular}
+\end{center}
+
+Esecuzione Maven pulita: otto test superati, nessun errore o fallimento. L'output della console resta quello riepilogativo standard di Maven/Surefire; i nomi dei metodi e i dettagli dei singoli casi sono disponibili nel codice e nei report generati, mentre questa tabella ne esplicita il collegamento alle regole di dominio.
