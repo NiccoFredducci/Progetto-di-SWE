@@ -3,7 +3,7 @@
 \section{Contesto e obiettivo}
 Il progetto ha per oggetto un'applicazione locale per organizzare un catalogo multimediale. Il tema scelto consente di distinguere un nucleo riutilizzabile per cataloghi generici dalla sua istanza concreta dedicata ai film: nel nucleo si parla di profili, media, sezioni e autori/contributori; nell'istanza si parla di film, generi e autori di film.
 
-Il nucleo generico realizzato è un modello di dominio indipendente dall'interfaccia e dalla persistenza. L'interfaccia grafica è uno strumento di esplorazione del sistema; il progetto pone al centro il modello, le relazioni e i servizi applicativi.
+Il nucleo generico realizzato comprende un modello di dominio e servizi applicativi che dipendono da interfacce repository. Gli adattatori in memoria consentono di verificare le operazioni senza dipendere dall'interfaccia o dal database. L'interfaccia grafica è uno strumento di esplorazione del sistema; il progetto pone al centro il modello, le relazioni e i servizi.
 
 \section{Perimetro descritto in questa relazione}
 Il contenuto copre profili e preferenze, media basati su file, autori/contributori e sezioni, con le relative cardinalità e i campi obbligatori. La relazione illustra il modello, il codice e i test unitari corrispondenti.

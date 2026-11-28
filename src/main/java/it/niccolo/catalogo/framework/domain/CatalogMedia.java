@@ -40,6 +40,22 @@ public final class CatalogMedia {
     public UUID authorId() { return authorId; }
     public Set<UUID> sectionIds() { return sectionIds; }
 
+    public CatalogMedia withSection(UUID sectionId) {
+        Set<UUID> updated = new HashSet<>(sectionIds);
+        updated.add(Objects.requireNonNull(sectionId, "sectionId must not be null"));
+        return copyWithSections(updated);
+    }
+
+    public CatalogMedia withoutSection(UUID sectionId) {
+        Set<UUID> updated = new HashSet<>(sectionIds);
+        updated.remove(Objects.requireNonNull(sectionId, "sectionId must not be null"));
+        return copyWithSections(updated);
+    }
+
+    private CatalogMedia copyWithSections(Set<UUID> sections) {
+        return new CatalogMedia(id, filePath, title, description, coverPath, authorId, sections);
+    }
+
     private static Set<UUID> immutableIds(Set<UUID> ids) {
         Objects.requireNonNull(ids, "sectionIds must not be null");
         Set<UUID> copy = new HashSet<>(ids);

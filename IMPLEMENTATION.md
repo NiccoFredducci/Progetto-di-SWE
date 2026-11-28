@@ -19,7 +19,7 @@ Aggiornare questo piano insieme a `FEATURES.md` ogni volta che cambia lo stato d
 |---|---|---|
 | 1. Modello concettuale e relazioni | Distinguere framework generico e istanza per film; fissare le associazioni, le cardinalità e i vincoli approvati; isolare le domande da sottoporre all'autore prima di vincolare lo schema. | **Finito** |
 | 2. Nucleo del framework | Modellare i concetti generici e le regole indipendenti dalla persistenza e dalla UI; verificare le invarianti con test di dominio. | **Finito** |
-| 3. Servizi e associazioni | Implementare i casi d'uso e le relazioni tra profili, media, sezioni e autori; provarli con repository sostitutivi in memoria. | **Non iniziato** |
+| 3. Servizi e associazioni | Implementare i casi d'uso e le relazioni tra profili, media, sezioni e autori; provarli con repository sostitutivi in memoria. | **Finito** |
 | 4. Persistenza relazionale con ORM | Scegliere l'ORM con l'autore, mappare i concetti nel database locale e verificare salvataggio, lettura, vincoli e relazioni con prove d'integrazione. | **Non iniziato** |
 | 5. Profili e interfaccia essenziale | Allineare selezione, creazione, modifica e cancellazione confermata dei profili ai servizi del framework; aggiungere la scelta della foto e verificarne i flussi. | **Iniziato** |
 | 6. Consultazione e ricerca del catalogo | Presentare preferiti e sezioni, applicare gli ordinamenti richiesti e integrare la ricerca dopo averne concordato i campi e il comportamento. | **Non iniziato** |
@@ -55,7 +55,7 @@ Questa fase è stata revisionata dall'autore. **Un film è un media nel framewor
 
 - **Segnaposto** — Il comportamento visivo è deciso, ma la rappresentazione tecnica va progettata mantenendo separato il riferimento a un'immagine dal colore e dal testo generati. Il colore pseudo-casuale potrà essere persistente o stabile per identità; questa scelta non è ancora necessaria per il modello concettuale.
 - **File** — Il riferimento al percorso scelto è richiesto; il meccanismo opzionale di copia e il comportamento se un file viene spostato, eliminato o diventa illeggibile andranno precisati con la persistenza e i flussi di errore.
-- **Unicità e confronti** — Non sono ancora fissate l'unicità dei nomi, la normalizzazione di testo o le regole esatte per confrontare titoli nell'ordinamento alfabetico.
+- **Unicità e confronti** — È stata definita e implementata l'unicità dei nomi delle sezioni: Unicode NFC, confronto senza distinzione tra maiuscole/minuscole, spazi Unicode ai margini ignorati, sequenze interne di spazi ridotte a uno; gli accenti restano significativi. Le regole per confrontare titoli nell'ordinamento alfabetico non sono ancora definite.
 - **Interfaccia** — È ancora da definire come le preferenze di autori si rendono consultabili, oltre alla sezione dei media preferiti.
 
 ### Criterio di uscita della fase
@@ -74,7 +74,11 @@ Confine di questo incremento: il modello descrive i riferimenti alle entità, ma
 
 ### Fase 3 — Servizi e associazioni
 
-Implementare operazioni applicative per i flussi approvati. Usare repository sostitutivi in memoria per verificare casi normali, alternative, errori, ordinamenti e associazioni senza database definitivo. Verificare in particolare che i contenuti siano globali, mentre le preferenze siano isolate per profilo, che eliminare un profilo rimuova solo le sue preferenze e che il catalogo rifiuti due sezioni con lo stesso nome. La regola di unicità è a livello di insieme/catalogo, non del singolo oggetto sezione; la semantica del confronto tra nomi (maiuscole/minuscole e normalizzazione) va decisa prima di implementarla. I sostituti implementano le stesse interfacce usate poi dalla persistenza, così i test e la UI attraversano i medesimi servizi.
+Sono stati introdotti `CatalogService`, interfacce repository e adattatori in memoria per profili, media, sezioni e autori. Il servizio crea profili, aggiunge autori e media, gestisce preferenze personali, associazioni media-sezione e query per autore o sezione. Prima di salvare un media verifica che autore e sezioni referenziate esistano. L'eliminazione di un profilo rimuove solo il profilo con le sue preferenze; gli elementi condivisi restano disponibili.
+
+Il servizio crea sezioni e impedisce nomi duplicati normalizzando le forme Unicode canoniche, ignorando maiuscole/minuscole, spazi Unicode ai margini e sequenze multiple di spazi interni; non rimuove gli accenti. L'adattatore in memoria applica lo stesso criterio di confronto.
+
+Sette test applicativi, insieme agli otto test di dominio, sono stati eseguiti con `mvn -o clean test`: 15 test superati, senza errori o fallimenti. Le prove usano repository in memoria. La fase 3 è Finita per i servizi applicativi e le associazioni concordate; la persistenza e l'integrazione con UI appartengono alle fasi successive.
 
 ### Fase 4 — Persistenza
 

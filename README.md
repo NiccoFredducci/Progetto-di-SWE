@@ -8,7 +8,7 @@ Nel disegno approvato, tutti i profili condividono media, sezioni e autori; solt
 
 ## Stato attuale
 
-Il prototipo contiene una schermata iniziale di selezione profilo che legge i profili dal database locale e consente di selezionarne o crearne uno. È presente anche il primo modello generico del framework (`CatalogProfile`, `CatalogMedia`, `CatalogSection`, `CatalogAuthor`), indipendente dalla UI e dal database, verificato da otto test unitari superati. La schermata iniziale non apre altre viste del catalogo.
+Il prototipo contiene una schermata iniziale di selezione profilo che legge i profili dal database locale e consente di selezionarne o crearne uno. Nel framework generico sono presenti il modello di dominio e il livello applicativo con repository in memoria: il servizio gestisce profili e preferenze, autori, media, creazione di sezioni con nomi univoci normalizzati, associazioni media-sezione e query di catalogo. I test di dominio e servizio sono 15 e risultano superati. Questo livello applicativo non è ancora collegato alla schermata Swing o al database SQLite del prototipo.
 
 ## Cosa installare
 
@@ -48,7 +48,7 @@ I test automatici usano JUnit 5 e Maven Surefire; non richiedono l'installazione
 mvn clean test
 ```
 
-Maven scarica le dipendenze di test al primo utilizzo. `clean` elimina gli artefatti generati in `target` e forza la ricompilazione; è utile anche se VS Code ha lasciato lì classi obsolete. Gli otto test correnti verificano il nucleo generico del dominio (campi obbligatori, preferenze, associazioni media-sezione e sezioni vuote) e sono stati superati.
+Maven scarica le dipendenze di test al primo utilizzo. `clean` elimina gli artefatti generati in `target` e forza la ricompilazione; è utile anche se VS Code ha lasciato lì classi obsolete. I 15 test correnti verificano il modello e i servizi generici: campi obbligatori, preferenze per profilo, condivisione del catalogo, cancellazione del profilo senza cancellare contenuti condivisi, associazioni media-sezione, sezioni vuote, nomi di sezione duplicati dopo normalizzazione e riferimenti non validi. Sono stati superati.
 
 La console mantiene il riepilogo standard di Maven/Surefire, senza stampe aggiuntive per ogni asserzione. I metodi di test hanno nomi descrittivi in italiano e descrizioni JUnit leggibili negli ambienti compatibili. I risultati dettagliati sono consultabili nei file generati in `target/surefire-reports/`; la relazione LaTeX collega ciascun caso alla regola di dominio verificata.
 
@@ -82,7 +82,7 @@ Set-Location docs
 latexmk -pdf report.tex
 ```
 
-Il PDF risultante è `docs/report.pdf` (salvo diversa cartella di output configurata nell'estensione). Il documento è ancora una struttura iniziale con segnaposto: va aggiornato progressivamente con i contenuti e le verifiche effettive del progetto.
+Il PDF risultante è `docs/report.pdf` (salvo diversa cartella di output configurata nell'estensione). La relazione descrive il modello generico e i servizi attualmente realizzati, insieme alle verifiche effettivamente eseguite; viene ampliata quando si completano ulteriori parti del progetto.
 
 Per controllare che gli strumenti siano raggiungibili:
 

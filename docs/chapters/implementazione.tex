@@ -15,5 +15,10 @@ Ogni entità ha un UUID. I metodi factory \texttt{create} generano un nuovo iden
 
 La validazione di ogni entità si limita ai vincoli locali del suo oggetto. Non esegue accessi a file, database o interfaccia grafica.
 
+\section{Servizi e repository in memoria}
+\texttt{CatalogService} dipende da quattro interfacce repository, una per ciascuna entità generica. I relativi adattatori in memoria conservano gli oggetti in mappe indicizzate per UUID, implementano le ricerche usate dal servizio e restituiscono copie delle liste lette.
+
+Il servizio crea ed elimina profili, registra autori e media, crea sezioni, modifica preferenze di media/autore e associazioni media-sezione, e fornisce letture del catalogo e query per autore o sezione. La creazione di una sezione rifiuta nomi già presenti secondo la normalizzazione descritta in progettazione. Prima di registrare un media controlla l'esistenza dell'autore e delle sezioni referenziate; le preferenze accettano solo profili e contenuti esistenti. Ogni modifica alle associazioni sostituisce l'entità immutabile nel repository. Eliminare un profilo rimuove il solo profilo, nel quale sono contenute le preferenze, e lascia invariati i repository condivisi.
+
 \section{Tecnologie del modello e dei test}
-Il progetto è compilato con Maven per Java 27. I test del nucleo usano JUnit 5 e vengono eseguiti nella fase di test Maven tramite Surefire. Il progetto include inoltre il prototipo preesistente di selezione profilo con interfaccia Swing e accesso SQLite tramite JDBC; il package generico di dominio non dipende da tali componenti.
+Il progetto è compilato con Maven per Java 27. I test del nucleo e dei servizi usano JUnit 5 e vengono eseguiti nella fase di test Maven tramite Surefire. Il progetto include inoltre il prototipo preesistente di selezione profilo con interfaccia Swing e accesso SQLite tramite JDBC; il package generico di dominio e i servizi descritti non dipendono da tali componenti.

@@ -1,7 +1,7 @@
 \chapter{Verifica}
 
-\section{Test unitari del modello}
-Il nucleo è verificato con otto test JUnit 5. I metodi hanno nomi descrittivi in italiano; le annotazioni \texttt{@DisplayName} forniscono una descrizione estesa negli ambienti compatibili. La tabella collega le prove alle regole di dominio:
+\section{Test del modello e dei servizi}
+Il modello e i servizi sono verificati con quindici test JUnit 5: otto casi sul dominio e sette casi applicativi. I metodi hanno nomi descrittivi in italiano; le annotazioni \texttt{@DisplayName} forniscono una descrizione estesa negli ambienti compatibili. La prima tabella collega i test del dominio alle regole verificate:
 
 \begin{center}
 \small
@@ -29,4 +29,32 @@ Autore con il solo nome & Foto e descrizione dell'autore possono essere assenti.
 \end{tabular}
 \end{center}
 
-Esecuzione Maven pulita: otto test superati, nessun errore o fallimento. L'output della console resta quello riepilogativo standard di Maven/Surefire; i nomi dei metodi e i dettagli dei singoli casi sono disponibili nel codice e nei report generati, mentre questa tabella ne esplicita il collegamento alle regole di dominio.
+Gli otto test del dominio sono stati superati senza errori o fallimenti. L'output della console resta quello riepilogativo standard di Maven/Surefire; i nomi dei metodi e i dettagli dei singoli casi sono disponibili nel codice e nei report generati, mentre questa tabella ne esplicita il collegamento alle regole di dominio.
+
+\section{Test dei servizi applicativi}
+I sette test applicativi usano repository in memoria e verificano le operazioni orchestrate da \texttt{CatalogService}:
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{5.2cm}|p{9.4cm}|}
+\hline
+\textbf{Caso di test} & \textbf{Regola verificata} \\
+\hline
+Catalogo condiviso e preferenze isolate & Profili diversi leggono gli stessi media e autori, ma mantengono insiemi di preferenze indipendenti; le preferenze possono essere aggiunte e rimosse. \\
+\hline
+Eliminazione di un profilo & La cancellazione rimuove il profilo e le sue preferenze, preservando media, autori, sezioni e preferenze degli altri profili. \\
+\hline
+Associazioni media-sezione & Si possono associare più sezioni a un media, rimuoverne una e interrogare i media di ciascuna sezione; una sezione vuota resta nel catalogo. \\
+\hline
+Riferimenti mancanti nel media & Il servizio rifiuta media che indicano autori o sezioni non presenti e non salva l'elemento non valido. \\
+\hline
+Riferimenti mancanti nelle preferenze & Il servizio rifiuta preferenze verso media o autori inesistenti senza modificare il profilo. \\
+\hline
+Eliminazione di profilo inesistente & Il servizio segnala l'assenza del profilo richiesto. \\
+\hline
+Nomi di sezione equivalenti & Il servizio rifiuta una seconda sezione che differisce solo per maiuscole/minuscole, spazi ridondanti o codifica Unicode canonica. \\
+\hline
+\end{tabular}
+\end{center}
+
+La suite completa è stata eseguita con \texttt{mvn -o clean test}: quindici test superati, nessun errore o fallimento. L'output console conserva il riepilogo standard di Maven/Surefire; i casi sono nominati nel codice e collegati ai vincoli in queste tabelle.

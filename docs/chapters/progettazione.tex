@@ -23,7 +23,12 @@ Media--autore & media: uno; autore: zero o più & Un ID autore obbligatorio nel 
 \end{tabular}
 \end{center}
 
+\section{Servizi applicativi e repository}
+\texttt{CatalogService} coordina i casi d'uso del framework senza accedere direttamente a collezioni concrete o al database. Le dipendenze verso i profili, i media, le sezioni e gli autori sono espresse tramite interfacce repository; gli adattatori in memoria implementano queste interfacce per le prove applicative.
+
+Le associazioni sono aggiornate sul lato scelto dal modello: il profilo conserva le proprie preferenze e il media conserva le sezioni associate. Le query dei media per autore o sezione ricavano la relazione dai media catalogati. La cancellazione del profilo opera solo sul repository dei profili; i repository condivisi di media, autori e sezioni non vengono modificati.
+
 \section{Vincoli rappresentati}
 I costruttori verificano la presenza degli identificatori obbligatori e dei dati testuali richiesti: il nome per profilo, autore e sezione; titolo, percorso file e autore per media. Le descrizioni, le fotografie, la copertina e le sezioni di un media possono essere assenti. Gli insiemi di associazioni sono copiati all'ingresso e restituiti come collezioni non modificabili.
 
-Il modello rappresenta riferimenti, non possiede il catalogo condiviso e non controlla che gli identificatori associati corrispondano a entità esistenti.
+Il modello rappresenta riferimenti, non possiede il catalogo condiviso e non controlla che gli identificatori associati corrispondano a entità esistenti. Il servizio garantisce invece l'unicità dei nomi delle sezioni applicando una chiave di confronto normalizzata: Unicode NFC, confronto senza distinzione tra maiuscole e minuscole, spazi Unicode iniziali/finali ignorati e spazi interni consecutivi ridotti a uno. Gli accenti non vengono rimossi.
